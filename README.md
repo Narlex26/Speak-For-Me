@@ -1,16 +1,67 @@
-# speak_for_me
+# Speak for Me 🎭
 
-A new Flutter project.
+Une application mobile humoristique Flutter qui "traduit" les bébés et les animaux !
 
-## Getting Started
+## 📱 Concept
 
-This project is a starting point for a Flutter application.
+**Speak for Me** est un faux traducteur pour bébés et animaux. L'application simule une analyse sonore sophistiquée pour afficher des phrases absurdes et drôles. 100% fiable* (*Non.)
 
-A few resources to get you started if this is your first Flutter project:
+## 🐾 Profils disponibles
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **👶 Bébé** - Philosophie existentielle, refus du sommeil et guerre contre les légumes
+- **🐕 Chien** - Loyauté inconditionnelle, obsession des croquettes et haine du facteur
+- **🐈 Chat** - Domination mondiale, mépris calculé et jugement silencieux
+- **🐠 Poisson Rouge** - Mémoire courte et émerveillement répété devant le château
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## ✨ Fonctionnalités
+
+- Interface Material 3 moderne avec dégradés et animations fluides
+- Bouton d'enregistrement avec animation de pulsation
+- Effet Shimmer pendant l'analyse
+- Messages de statut changeants ("Analyse des miaulements...", "Décryptage du mépris félin...")
+- Text-to-Speech avec voix grave pour un effet comique
+- Sons de bip au début et à la fin de l'enregistrement
+
+## 🛠️ Technologies
+
+- Flutter 3.x
+- Material 3
+- `flutter_tts` - Synthèse vocale
+- `font_awesome_flutter` - Icônes
+- `google_fonts` - Typographie
+- `shimmer` - Effet de chargement
+- `audioplayers` - Sons
+
+## 🚀 Installation
+
+```bash
+flutter pub get
+flutter run
+```
+
+## 📂 Structure du projet
+
+```
+lib/
+├── main.dart
+├── data/
+│   └── translation_phrases.dart
+├── models/
+│   └── profile.dart
+├── screens/
+│   ├── home_screen.dart
+│   └── translation_screen.dart
+├── services/
+│   ├── audio_service.dart
+│   ├── translation_service.dart
+│   └── tts_service.dart
+└── widgets/
+    ├── profile_card.dart
+    ├── pulsating_button.dart
+    ├── shimmer_loader.dart
+    └── translation_result.dart
+```
+
+## 📄 Licence
+
+Projet créé pour le fun ! 🎉

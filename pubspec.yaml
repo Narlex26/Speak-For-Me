@@ -46,9 +46,6 @@ dependencies:
   
   # Shimmer effect
   shimmer: ^3.0.0
-  
-  # Audio player for beep sounds
-  audioplayers: ^6.1.0
 
 dev_dependencies:
   flutter_test:
