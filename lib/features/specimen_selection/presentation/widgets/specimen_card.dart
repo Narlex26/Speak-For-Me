@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/profile.dart';
+import '../../domain/entities/specimen.dart';
 
-class ProfileCard extends StatelessWidget {
+class SpecimenCard extends StatelessWidget {
   final Profile profile;
   final VoidCallback onTap;
 
-  const ProfileCard({
+  const SpecimenCard({
     super.key,
     required this.profile,
     required this.onTap,

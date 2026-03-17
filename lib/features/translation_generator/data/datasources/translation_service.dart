@@ -1,6 +1,6 @@
 import 'dart:math';
-import '../models/profile.dart';
-import '../data/translation_phrases.dart';
+import '../../../specimen_selection/domain/entities/specimen.dart';
+import 'translation_phrases.dart';
 
 class TranslationService {
   final Random _random = Random();

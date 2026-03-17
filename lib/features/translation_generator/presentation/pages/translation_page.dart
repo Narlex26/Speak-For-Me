@@ -1,26 +1,26 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/profile.dart';
-import '../services/translation_service.dart';
-import '../services/tts_service.dart';
-import '../services/audio_service.dart';
-import '../widgets/pulsating_button.dart';
-import '../widgets/shimmer_loader.dart';
+import 'package:speak_for_me/features/specimen_selection/domain/entities/specimen.dart';
+import 'package:speak_for_me/features/translation_generator/data/datasources/translation_service.dart';
+import 'package:speak_for_me/features/text_to_speech/data/datasources/tts_service.dart';
+import 'package:speak_for_me/features/audio_recording/data/datasources/audio_service.dart';
+import 'package:speak_for_me/features/audio_recording/presentation/widgets/pulsating_button.dart';
+import 'package:speak_for_me/core/widgets/shimmer_loader.dart';
 import '../widgets/translation_result.dart';
 
 enum TranslationState { idle, recording, analyzing, result }
 
-class TranslationScreen extends StatefulWidget {
+class TranslationPage extends StatefulWidget {
   final Profile profile;
 
-  const TranslationScreen({super.key, required this.profile});
+  const TranslationPage({super.key, required this.profile});
 
   @override
-  State<TranslationScreen> createState() => _TranslationScreenState();
+  State<TranslationPage> createState() => _TranslationPageState();
 }
 
-class _TranslationScreenState extends State<TranslationScreen> {
+class _TranslationPageState extends State<TranslationPage> {
   final TranslationService _translationService = TranslationService();
   final TtsService _ttsService = TtsService();
   final AudioService _audioService = AudioService();

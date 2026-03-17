@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'screens/home_screen.dart';
+import 'features/specimen_selection/presentation/pages/specimen_selection_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +44,7 @@ class SpeakForMeApp extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
       ),
-      home: const HomeScreen(),
+      home: const SpecimenSelectionPage(),
     );
   }
 }

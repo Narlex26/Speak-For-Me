@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../models/profile.dart';
-import '../widgets/profile_card.dart';
-import 'translation_screen.dart';
+import 'package:speak_for_me/features/specimen_selection/domain/entities/specimen.dart';
+import 'package:speak_for_me/features/specimen_selection/presentation/widgets/specimen_card.dart';
+import 'package:speak_for_me/features/translation_generator/presentation/pages/translation_page.dart' as trans;
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class SpecimenSelectionPage extends StatelessWidget {
+  const SpecimenSelectionPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -129,14 +129,14 @@ class HomeScreen extends StatelessWidget {
                     itemCount: profiles.length,
                     itemBuilder: (context, index) {
                       final profile = profiles[index];
-                      return ProfileCard(
-                        profile: profile,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) =>
-                                  TranslationScreen(profile: profile),
+                        return SpecimenCard(
+                          profile: profile,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder: (context, animation, secondaryAnimation) =>
+                                    trans.TranslationPage(profile: profile),
                               transitionsBuilder:
                                   (context, animation, secondaryAnimation, child) {
                                 return FadeTransition(
@@ -180,4 +180,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-

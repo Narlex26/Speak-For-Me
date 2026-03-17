@@ -1,4 +1,4 @@
-import '../models/profile.dart';
+import '../../../specimen_selection/domain/entities/specimen.dart';
 
 class TranslationPhrases {
   static const Map<ProfileType, List<String>> phrases = {
