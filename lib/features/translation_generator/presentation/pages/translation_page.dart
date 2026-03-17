@@ -8,6 +8,9 @@ import 'package:speak_for_me/features/audio_recording/data/datasources/audio_ser
 import 'package:speak_for_me/features/audio_recording/presentation/widgets/pulsating_button.dart';
 import 'package:speak_for_me/core/widgets/shimmer_loader.dart';
 import '../widgets/translation_result.dart';
+import 'package:speak_for_me/features/expert_mode/presentation/widgets/spectral_graph_widget.dart';
+import 'package:speak_for_me/features/expert_mode/presentation/widgets/technical_data_widget.dart';
+import 'package:speak_for_me/features/expert_mode/presentation/widgets/expert_result_widget.dart';
 
 enum TranslationState { idle, recording, analyzing, result }
 
@@ -25,6 +28,7 @@ class _TranslationPageState extends State<TranslationPage> {
   final TtsService _ttsService = TtsService();
   final AudioService _audioService = AudioService();
 
+  bool _isExpertMode = false;
   TranslationState _state = TranslationState.idle;
   String _analysisMessage = '';
   String _translatedText = '';
@@ -184,7 +188,7 @@ class _TranslationPageState extends State<TranslationPage> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withValues(alpha: 0.1),
+                    color: Colors.grey.withOpacity(0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -199,42 +203,35 @@ class _TranslationPageState extends State<TranslationPage> {
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Mode ${widget.profile.name}',
-                  style: GoogleFonts.poppins(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: widget.profile.primaryColor,
-                  ),
-                ),
-                Text(
-                  'Traducteur en temps réel',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-              ],
+            child: Text(
+              'Traducteur ${widget.profile.name}',
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  widget.profile.primaryColor,
-                  widget.profile.secondaryColor,
-                ],
+          // Expert Mode Toggle
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isExpertMode = !_isExpertMode;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: _isExpertMode ? Colors.black87 : Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black12),
               ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              widget.profile.icon,
-              color: Colors.white,
-              size: 24,
+              child: Icon(
+                Icons.science,
+                color: _isExpertMode ? Colors.greenAccent : Colors.grey,
+                size: 24,
+              ),
             ),
           ),
         ],
@@ -243,49 +240,94 @@ class _TranslationPageState extends State<TranslationPage> {
   }
 
   Widget _buildContent() {
+    // If expert mode is on, we wrap the content or show overlays
+    if (_isExpertMode && (_state == TranslationState.recording || _state == TranslationState.analyzing)) {
+      return Stack(
+        children: [
+          // Background content
+          Column(
+            children: [
+              const Spacer(flex: 1),
+              _buildMainTranslationArea(),
+              const Spacer(flex: 1),
+            ],
+          ),
+          
+          // Expert Overlays
+          Positioned(
+            top: 10,
+            left: 10,
+            right: 10,
+            child: SpectralGraphWidget(
+              baseColor: widget.profile.primaryColor,
+              isAnimating: _state == TranslationState.recording || _state == TranslationState.analyzing,
+            ),
+          ),
+          Positioned(
+            bottom: 10,
+            left: 10,
+            right: 10,
+            child: const TechnicalDataWidget(),
+          ),
+        ],
+      );
+    }
+    
     return Column(
       children: [
         const Spacer(flex: 1),
-
         // Status text
         _buildStatusText(),
 
         const SizedBox(height: 40),
 
-        // Main action area
-        if (_state == TranslationState.analyzing)
-          ShimmerLoader(
-            message: _analysisMessage,
-            baseColor: widget.profile.primaryColor,
-            progress: _progress.clamp(0.0, 1.0),
-          )
-        else if (_state == TranslationState.result)
-          Expanded(
-            child: SingleChildScrollView(
-              child: TranslationResult(
-                text: _translatedText,
-                color: widget.profile.primaryColor,
-              ),
-            ),
-          )
-        else
-          PulsatingButton(
-            onPressed: _state == TranslationState.recording
-                ? _stopRecording
-                : _startRecording,
-            isRecording: _state == TranslationState.recording,
-            color: widget.profile.primaryColor,
-            icon: Icons.mic_rounded,
-          ),
+        _buildMainTranslationArea(),
 
         const Spacer(flex: 1),
-
-        // Bottom buttons
-        if (_state == TranslationState.result) _buildResultActions(),
-
-        const SizedBox(height: 32),
       ],
     );
+  }
+
+  Widget _buildMainTranslationArea() {
+    if (_state == TranslationState.analyzing) {
+      return ShimmerLoader(
+        message: _analysisMessage,
+        baseColor: widget.profile.primaryColor,
+        progress: _progress.clamp(0.0, 1.0),
+      );
+    } else if (_state == TranslationState.result) {
+      return Expanded(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TranslationResult(
+                      text: _translatedText,
+                      color: widget.profile.primaryColor,
+                    ),
+                    if (_isExpertMode) ...[
+                      const SizedBox(height: 24),
+                      ExpertResultWidget(color: widget.profile.primaryColor),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildResultActions(),
+          ],
+        ),
+      );
+    } else {
+      return PulsatingButton(
+        onPressed: _state == TranslationState.recording ? _stopRecording : _startRecording,
+        isRecording: _state == TranslationState.recording,
+        color: widget.profile.primaryColor,
+        icon: _state == TranslationState.recording ? Icons.stop_rounded : Icons.mic_rounded,
+      );
+    }
   }
 
   Widget _buildStatusText() {
@@ -385,4 +427,3 @@ class _TranslationPageState extends State<TranslationPage> {
     );
   }
 }
-
