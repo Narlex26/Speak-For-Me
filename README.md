@@ -20,7 +20,8 @@ Une application mobile humoristique Flutter qui "traduit" les bébés et les ani
 - Effet Shimmer pendant l'analyse
 - Messages de statut changeants ("Analyse des miaulements...", "Décryptage du mépris félin...")
 - Text-to-Speech avec voix grave pour un effet comique
-- Sons de bip au début et à la fin de l'enregistrement
+- Historique des "traductions" récentes
+- Partage des résultats absurdes avec vos amis
 
 ## 🛠️ Technologies
 
@@ -30,7 +31,6 @@ Une application mobile humoristique Flutter qui "traduit" les bébés et les ani
 - `font_awesome_flutter` - Icônes
 - `google_fonts` - Typographie
 - `shimmer` - Effet de chargement
-- `audioplayers` - Sons
 
 ## 🚀 Installation
 
@@ -41,26 +41,24 @@ flutter run
 
 ## 📂 Structure du projet
 
+L'application suit une architecture **Feature-First**. Pour plus de détails, consultez [ARCHITECTURE.md](ARCHITECTURE.md).
+
 ```
 lib/
-├── main.dart
-├── data/
-│   └── translation_phrases.dart
-├── models/
-│   └── profile.dart
-├── screens/
-│   ├── home_screen.dart
-│   └── translation_screen.dart
-├── services/
-│   ├── audio_service.dart
-│   ├── translation_service.dart
-│   └── tts_service.dart
-└── widgets/
-    ├── profile_card.dart
-    ├── pulsating_button.dart
-    ├── shimmer_loader.dart
-    └── translation_result.dart
+├── core/                   # Code partagé (thème, widgets, utils)
+├── features/               # Fonctionnalités par dossier
+│   ├── audio_recording/    # Enregistrement audio
+│   ├── history/            # Historique
+│   ├── sharing/            # Partage
+│   ├── specimen_selection/ # Choix du profil
+│   ├── text_to_speech/     # Synthèse vocale
+│   └── translation_generator/ # Logique de traduction
+└── main.dart               # Point d'entrée
 ```
+
+## 🤝 Contribution
+
+Consultez [CONTRIBUTING.md](CONTRIBUTING.md) pour savoir comment contribuer !
 
 ## 📄 Licence
 
