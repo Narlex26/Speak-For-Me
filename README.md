@@ -41,7 +41,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 10 | Interface responsive (Android / iOS) avec thème sombre/clair auto | 🟡 En cours | Détection automatique thème système |
 | 11 | Gestion des permissions microphone | ✅ Terminé | Demandé même si micro non utilisé |
 | 12 | Historique des traductions avec horodatage + suppression individuelle | 🔴 Non commencé | SQLite local, 100 entrées affichées, rotation auto à 500 |
-| 13 | Partage social vers apps tierces (WhatsApp, Instagram…) | 🟡 En cours | Export texte + capture écran avec watermark |
+| 13 | Partage social vers apps tierces (WhatsApp, Instagram…) | ✅ Terminé | Export texte + capture écran avec watermark |
 
 ### Nice-to-have
 
