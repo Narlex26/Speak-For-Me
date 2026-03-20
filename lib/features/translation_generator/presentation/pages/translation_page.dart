@@ -7,6 +7,7 @@ import 'package:speak_for_me/features/text_to_speech/data/datasources/tts_servic
 import 'package:speak_for_me/features/audio_recording/data/datasources/audio_service.dart';
 import 'package:speak_for_me/features/audio_recording/presentation/widgets/pulsating_button.dart';
 import 'package:speak_for_me/core/widgets/shimmer_loader.dart';
+import 'package:speak_for_me/features/translation_generator/presentation/widgets/add_phrase_sheet.dart';
 import '../widgets/translation_result.dart';
 import 'package:speak_for_me/features/expert_mode/presentation/widgets/spectral_graph_widget.dart';
 import 'package:speak_for_me/features/expert_mode/presentation/widgets/technical_data_widget.dart';
@@ -142,6 +143,27 @@ class _TranslationPageState extends State<TranslationPage> {
     });
   }
 
+  Future<void> _openAddPhraseSheet() async {
+    final added = await showAddPhraseBottomSheet(
+      context: context,
+      profile: widget.profile,
+      translationService: _translationService,
+    );
+
+    if (!mounted || added != true) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Phrase ajoutee avec succes.'),
+      backgroundColor: Colors.green,
+    ));
+
+    setState(() {
+      // Refresh UI to reflect updated in-memory phrase list.
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,6 +235,23 @@ class _TranslationPageState extends State<TranslationPage> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+          GestureDetector(
+            onTap: _openAddPhraseSheet,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black12),
+              ),
+              child: Icon(
+                Icons.add_rounded,
+                color: widget.profile.primaryColor,
+                size: 24,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
           // Expert Mode Toggle
           GestureDetector(
             onTap: () {

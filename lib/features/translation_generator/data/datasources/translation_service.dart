@@ -5,13 +5,67 @@ import 'translation_phrases.dart';
 class TranslationService {
   final Random _random = Random();
 
+  final Map<ProfileType, List<String>> _customPhrases = {
+    ProfileType.baby: [],
+    ProfileType.dog: [],
+    ProfileType.cat: [],
+    ProfileType.goldfish: [],
+  };
+
   /// Returns a random phrase based on the profile type
   String translate(ProfileType profileType) {
-    final phrases = TranslationPhrases.phrases[profileType] ?? [];
+    final phrases = getPhrases(profileType);
     if (phrases.isEmpty) {
       return "Erreur de traduction...";
     }
     return phrases[_random.nextInt(phrases.length)];
+  }
+
+  List<String> getPhrases(ProfileType profileType) {
+    return [
+      ...?TranslationPhrases.phrases[profileType],
+      ...?_customPhrases[profileType],
+    ];
+  }
+
+  List<String> getCustomPhrases(ProfileType profileType) {
+    return List.unmodifiable(_customPhrases[profileType] ?? []);
+  }
+
+  /// Add a custom phrase for a profile with automatic moderation
+  bool addCustomPhrase(ProfileType profileType, String phrase) {
+    final normalized = phrase.trim();
+
+    if (normalized.isEmpty || normalized.length < 5) {
+      return false;
+    }
+
+    if (_containsProhibitedWord(normalized)) {
+      return false;
+    }
+
+    final customList = _customPhrases[profileType] ?? [];
+    if (customList.contains(normalized)) {
+      return false;
+    }
+
+    customList.add(normalized);
+    _customPhrases[profileType] = customList;
+    return true;
+  }
+
+  bool _containsProhibitedWord(String phrase) {
+    for (final word in TranslationPhrases.prohibitedWords) {
+      final pattern = RegExp(
+        r'(^|[^A-Za-zÀ-ÖØ-öø-ÿ])' + RegExp.escape(word) + r'([^A-Za-zÀ-ÖØ-öø-ÿ]|$)',
+        caseSensitive: false,
+      );
+      if (pattern.hasMatch(phrase)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /// Returns a random analysis message for the given profile

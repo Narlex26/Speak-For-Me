@@ -1,6 +1,12 @@
 import '../../../specimen_selection/domain/entities/specimen.dart';
 
 class TranslationPhrases {
+  static const List<String> prohibitedWords = [
+    'merde',
+    'putain',
+    'con',
+  ];
+
   static const Map<ProfileType, List<String>> phrases = {
     ProfileType.baby: [
       "Je refuse catégoriquement de dormir. La nuit est une construction sociale.",
