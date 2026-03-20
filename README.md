@@ -39,9 +39,9 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 8 | Feedback haptique au début/fin d'enregistrement | ✅ Terminé | `HapticFeedback` + `SystemSound.click` |
 | 9 | Mode Expert — graphe spectral et données techniques simulés | ✅ Terminé | |
 | 10 | Interface responsive (Android / iOS) avec thème sombre/clair auto | 🟡 En cours | Détection automatique thème système |
-| 11 | Gestion des permissions microphone | 🟡 En cours | Demandé même si micro non utilisé |
-| 12 | Historique des traductions avec horodatage + suppression individuelle | ✅ Terminé | SQLite local, 100 entrées affichées, rotation auto à 500 |
-| 13 | Partage social vers apps tierces (WhatsApp, Instagram…) | 🔴 Non commencé | Export texte + capture écran avec watermark |
+| 11 | Gestion des permissions microphone | ✅ Terminé | Demandé même si micro non utilisé |
+| 12 | Historique des traductions avec horodatage + suppression individuelle | 🔴 Non commencé | SQLite local, 100 entrées affichées, rotation auto à 500 |
+| 13 | Partage social vers apps tierces (WhatsApp, Instagram…) | 🟡 En cours | Export texte + capture écran avec watermark |
 
 ### Nice-to-have
 
