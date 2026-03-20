@@ -51,7 +51,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 2 | Personnalisation des réponses — ajout manuel de phrases avec modération automatique | ✅ Terminé | Whitelist caractères, filtre côté client |
 | 3 | Personnalisation audio — choix voix TTS masculines/féminines | 🔴 Non commencé | |
 | 4 | Thèmes visuels — animations de transition sombre/clair | 🔴 Non commencé | Au-delà de la détection auto |
-| 5 | Favoris — système d'étoiles avec section dédiée | 🔴 Non commencé | Colonne SQLite dédiée |
+| 5 | Favoris — système d'étoiles avec section dédiée | ✅ Terminé | Colonne SQLite dédiée |
 | 6 | Statistiques — compteur par spécimen, phrases favorites, streaks quotidiens | 🔴 Non commencé | |
 | 7 | Easter eggs — phrases rares (1% de probabilité) | 🔴 Non commencé | |
 | 8 | Export de l'historique (format texte) | 🔴 Non commencé | |
