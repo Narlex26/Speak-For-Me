@@ -39,7 +39,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 8 | Feedback haptique au début/fin d'enregistrement | ✅ Terminé | `HapticFeedback` + `SystemSound.click` |
 | 9 | Mode Expert — graphe spectral et données techniques simulés | ✅ Terminé | |
 | 10 | Interface responsive (Android / iOS) avec thème sombre/clair auto | 🟡 En cours | Détection automatique thème système |
-| 11 | Gestion des permissions microphone | 🔴 Non commencé | Demandé même si micro non utilisé |
+| 11 | Gestion des permissions microphone | 🟡 En cours | Demandé même si micro non utilisé |
 | 12 | Historique des traductions avec horodatage + suppression individuelle | 🔴 Non commencé | SQLite local, 100 entrées affichées, rotation auto à 500 |
 | 13 | Partage social vers apps tierces (WhatsApp, Instagram…) | 🔴 Non commencé | Export texte + capture écran avec watermark |
 
@@ -51,7 +51,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 15 | Personnalisation des réponses — ajout manuel de phrases avec modération automatique | 🔴 Non commencé | Whitelist caractères, filtre côté client |
 | 16 | Personnalisation audio — choix voix TTS masculines/féminines | 🔴 Non commencé | |
 | 17 | Thèmes visuels — animations de transition sombre/clair | 🔴 Non commencé | Au-delà de la détection auto |
-| 18 | Favoris — système d'étoiles avec section dédiée | 🔴 Non commencé | Colonne SQLite dédiée |
+| 18 | Favoris — système d'étoiles avec section dédiée | ✅ Terminé | Colonne SQLite dédiée |
 | 19 | Statistiques — compteur par spécimen, phrases favorites, streaks quotidiens | 🔴 Non commencé | |
 | 20 | Easter eggs — phrases rares (1% de probabilité) | 🔴 Non commencé | |
 | 21 | Export de l'historique (format texte) | 🔴 Non commencé | |
