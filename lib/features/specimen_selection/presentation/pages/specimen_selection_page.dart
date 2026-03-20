@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:speak_for_me/features/specimen_selection/domain/entities/specimen.dart';
 import 'package:speak_for_me/features/specimen_selection/presentation/widgets/specimen_card.dart';
 import 'package:speak_for_me/features/translation_generator/presentation/pages/translation_page.dart' as trans;
+import 'package:speak_for_me/features/favorites/presentation/pages/favorites_page.dart';
 
 class SpecimenSelectionPage extends StatelessWidget {
   const SpecimenSelectionPage({super.key});
@@ -164,7 +165,7 @@ class SpecimenSelectionPage extends StatelessWidget {
               ),
               // Footer
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.only(bottom: 80, top: 16, left: 16, right: 16),
                 child: Text(
                   '🎭 Pour le fun uniquement',
                   style: GoogleFonts.poppins(
@@ -176,6 +177,19 @@ class SpecimenSelectionPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const FavoritesPage(),
+            ),
+          );
+        },
+        backgroundColor: const Color(0xFF667EEA),
+        icon: const Icon(Icons.favorite_rounded),
+        label: const Text('Mes Favoris'),
       ),
     );
   }
