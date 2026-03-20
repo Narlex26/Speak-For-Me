@@ -1,4 +1,4 @@
-name: Create Labels for Issues
+name: Setup Issue Labels
 
 on:
   workflow_dispatch:
@@ -15,13 +15,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
-          gh api repos/$REPO/labels --method POST -f name="must-have" -f color="0052cc" -f description="Must-have feature" 2>/dev/null || true
-          gh api repos/$REPO/labels --method POST -f name="nice-to-have" -f color="5319e7" -f description="Nice-to-have feature" 2>/dev/null || true
-          gh api repos/$REPO/labels --method POST -f name="✅-done" -f color="0e8a16" -f description="Feature completed" 2>/dev/null || true
-          gh api repos/$REPO/labels --method POST -f name="🔴-todo" -f color="d93f0b" -f description="Feature not started" 2>/dev/null || true
+          # Create the 4 project labels
+          for label_def in \
+            "must-have:0052cc:Must-have feature" \
+            "nice-to-have:5319e7:Nice-to-have feature" \
+            "✅-done:0e8a16:Feature completed" \
+            "🔴-todo:d93f0b:Feature not started"; do
+            name="${label_def%%:*}"
+            rest="${label_def#*:}"
+            color="${rest%%:*}"
+            desc="${rest#*:}"
+            gh api repos/$REPO/labels --method POST \
+              -f name="$name" -f color="$color" -f description="$desc" 2>/dev/null || true
+          done
           echo "Labels created"
 
-      - name: Assign labels to must-have done issues
+      - name: Assign labels to must-have completed issues
+        # Issues #8–16: must-have features that are done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
@@ -31,6 +41,7 @@ jobs:
           done
 
       - name: Assign labels to must-have todo issues
+        # Issues #17–20: must-have features not yet started
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
@@ -39,7 +50,8 @@ jobs:
             gh issue edit $num --repo $REPO --add-label "must-have,🔴-todo" || true
           done
 
-      - name: Assign labels to nice-to-have done issues
+      - name: Assign labels to nice-to-have completed issues
+        # Issues #22 and #25: nice-to-have features that are done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
@@ -49,15 +61,17 @@ jobs:
           done
 
       - name: Assign labels to nice-to-have todo issues
+        # Issues #21, #23, #24, #26–29: nice-to-have features not yet started
+        # Note: #22 and #25 are excluded here as they are done (handled above)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
           for num in 21 23 24 26 27 28 29; do
-            gh issue edit $num --repo $REPO --add-label "nice-to-have,🔴-todo" || true
+            gh issue edit $num --repo $REPO --add-label "nice-to-have,��-todo" || true
           done
 
-      - name: Close test issues
+      - name: Close temporary test issues
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
