@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:speak_for_me/features/specimen_selection/domain/entities/specimen.dart';
 import 'package:speak_for_me/features/specimen_selection/presentation/widgets/specimen_card.dart';
 import 'package:speak_for_me/features/translation_generator/presentation/pages/translation_page.dart' as trans;
+import 'package:speak_for_me/features/favorites/presentation/pages/favorites_page.dart';
 
 class SpecimenSelectionPage extends StatelessWidget {
   const SpecimenSelectionPage({super.key});
@@ -12,6 +13,11 @@ class SpecimenSelectionPage extends StatelessWidget {
     final profiles = Profile.getAllProfiles();
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoritesPage())),
+        backgroundColor: Colors.amber,
+        child: const Icon(Icons.star, color: Colors.white),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

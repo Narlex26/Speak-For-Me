@@ -11,6 +11,8 @@ import '../widgets/translation_result.dart';
 import 'package:speak_for_me/features/expert_mode/presentation/widgets/spectral_graph_widget.dart';
 import 'package:speak_for_me/features/expert_mode/presentation/widgets/technical_data_widget.dart';
 import 'package:speak_for_me/features/expert_mode/presentation/widgets/expert_result_widget.dart';
+import 'package:speak_for_me/features/favorites/domain/entities/favorite.dart';
+import 'package:speak_for_me/features/favorites/data/datasources/favorites_datasource.dart';
 
 enum TranslationState { idle, recording, analyzing, result }
 
@@ -27,11 +29,13 @@ class _TranslationPageState extends State<TranslationPage> {
   final TranslationService _translationService = TranslationService();
   final TtsService _ttsService = TtsService();
   final AudioService _audioService = AudioService();
+  final FavoritesDatasource _favoritesDatasource = FavoritesDatasource();
 
   bool _isExpertMode = false;
   TranslationState _state = TranslationState.idle;
   String _analysisMessage = '';
   String _translatedText = '';
+  bool _isFavorite = false;
   double _progress = 0.0;
   Timer? _analysisTimer;
   Timer? _progressTimer;
@@ -126,11 +130,32 @@ class _TranslationPageState extends State<TranslationPage> {
     setState(() {
       _state = TranslationState.result;
       _translatedText = translation;
+      _isFavorite = false;
     });
 
     // Speak the result with TTS
     await Future.delayed(const Duration(milliseconds: 500));
     await _ttsService.speak(translation);
+  }
+
+  void _toggleFavorite() async {
+    final favorite = FavoriteTranslation(
+      profileType: widget.profile.type,
+      phrase: _translatedText,
+      date: DateTime.now(),
+    );
+    
+    if (_isFavorite) {
+      await _favoritesDatasource.removeFavorite(favorite);
+    } else {
+      await _favoritesDatasource.saveFavorite(favorite);
+    }
+    
+    if (mounted) {
+      setState(() {
+        _isFavorite = !_isFavorite;
+      });
+    }
   }
 
   void _reset() {
@@ -401,6 +426,28 @@ class _TranslationPageState extends State<TranslationPage> {
             ),
           ),
           const SizedBox(width: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withValues(alpha: 0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: IconButton(
+              onPressed: _toggleFavorite,
+              icon: Icon(
+                _isFavorite ? Icons.star : Icons.star_border,
+                color: Colors.amber,
+              ),
+              padding: const EdgeInsets.all(16),
+            ),
+          ),
+          const SizedBox(width: 8),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
