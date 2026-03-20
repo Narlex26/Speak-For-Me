@@ -1,323 +1,67 @@
-name: Create GitHub Issues and Labels
+name: Create Labels for Issues
 
 on:
-  push:
-    branches:
-      - 'copilot/create-github-issues-features'
+  workflow_dispatch:
 
 jobs:
-  create-issues:
+  create-labels-and-assign:
     runs-on: ubuntu-latest
     permissions:
       issues: write
       contents: read
-
     steps:
-      - name: Create labels and issues
+      - name: Create labels
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
-          # Create labels (ignore errors if already exists)
-          gh api repos/$REPO/labels --method POST -f name="must-have" -f color="0052cc" -f description="Must-have feature" 2>/dev/null || \
-            gh api "repos/$REPO/labels/must-have" --method PATCH -f color="0052cc" -f description="Must-have feature" 2>/dev/null || true
-          gh api repos/$REPO/labels --method POST -f name="nice-to-have" -f color="5319e7" -f description="Nice-to-have feature" 2>/dev/null || \
-            gh api "repos/$REPO/labels/nice-to-have" --method PATCH -f color="5319e7" -f description="Nice-to-have feature" 2>/dev/null || true
-          gh api repos/$REPO/labels --method POST -f name="✅-done" -f color="0e8a16" -f description="Feature completed" 2>/dev/null || \
-            gh api "repos/$REPO/labels/%E2%9C%85-done" --method PATCH -f color="0e8a16" -f description="Feature completed" 2>/dev/null || true
-          gh api repos/$REPO/labels --method POST -f name="🔴-todo" -f color="d93f0b" -f description="Feature not started" 2>/dev/null || \
-            gh api "repos/$REPO/labels/%F0%9F%94%B4-todo" --method PATCH -f color="d93f0b" -f description="Feature not started" 2>/dev/null || true
+          gh api repos/$REPO/labels --method POST -f name="must-have" -f color="0052cc" -f description="Must-have feature" 2>/dev/null || true
+          gh api repos/$REPO/labels --method POST -f name="nice-to-have" -f color="5319e7" -f description="Nice-to-have feature" 2>/dev/null || true
+          gh api repos/$REPO/labels --method POST -f name="✅-done" -f color="0e8a16" -f description="Feature completed" 2>/dev/null || true
+          gh api repos/$REPO/labels --method POST -f name="🔴-todo" -f color="d93f0b" -f description="Feature not started" 2>/dev/null || true
+          echo "Labels created"
 
-          echo "Labels created."
+      - name: Assign labels to must-have done issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for num in 8 9 10 11 12 13 14 15 16; do
+            gh issue edit $num --repo $REPO --add-label "must-have,✅-done" || true
+          done
 
-          # Issue 1
-          cat > /tmp/body1.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
+      - name: Assign labels to must-have todo issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for num in 17 18 19 20; do
+            gh issue edit $num --repo $REPO --add-label "must-have,🔴-todo" || true
+          done
 
-          **Catégorie :** Must-have
+      - name: Assign labels to nice-to-have done issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for num in 22 25; do
+            gh issue edit $num --repo $REPO --add-label "nice-to-have,✅-done" || true
+          done
 
-          **Notes :** Implémentée et fonctionnelle.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body1.md
-          gh issue create --repo $REPO \
-            --title "Sélection du profil (Bébé, Chien, Chat, Poisson Rouge) avec animations" \
-            --body-file /tmp/body1.md \
-            --label "must-have" --label "✅-done"
+      - name: Assign labels to nice-to-have todo issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for num in 21 23 24 26 27 28 29; do
+            gh issue edit $num --repo $REPO --add-label "nice-to-have,🔴-todo" || true
+          done
 
-          # Issue 2
-          cat > /tmp/body2.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Must-have
-          BODYEOF
-          sed -i 's/^          //' /tmp/body2.md
-          gh issue create --repo $REPO \
-            --title "Interface Material 3 avec dégradés et animations fluides" \
-            --body-file /tmp/body2.md \
-            --label "must-have" --label "✅-done"
-
-          # Issue 3
-          cat > /tmp/body3.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Must-have
-          BODYEOF
-          sed -i 's/^          //' /tmp/body3.md
-          gh issue create --repo $REPO \
-            --title "Bouton d'enregistrement avec animation de pulsation" \
-            --body-file /tmp/body3.md \
-            --label "must-have" --label "✅-done"
-
-          # Issue 4
-          cat > /tmp/body4.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Must-have
-          BODYEOF
-          sed -i 's/^          //' /tmp/body4.md
-          gh issue create --repo $REPO \
-            --title "Simulation d'analyse pseudo-scientifique — messages changeants + barre de progression" \
-            --body-file /tmp/body4.md \
-            --label "must-have" --label "✅-done"
-
-          # Issue 5
-          cat > /tmp/body5.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Must-have
-          BODYEOF
-          sed -i 's/^          //' /tmp/body5.md
-          gh issue create --repo $REPO \
-            --title "Effet Shimmer pendant l'analyse" \
-            --body-file /tmp/body5.md \
-            --label "must-have" --label "✅-done"
-
-          # Issue 6
-          cat > /tmp/body6.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Must-have
-
-          **Notes :** 15 phrases par profil, sélection purement aléatoire.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body6.md
-          gh issue create --repo $REPO \
-            --title "Génération aléatoire de phrases par profil" \
-            --body-file /tmp/body6.md \
-            --label "must-have" --label "✅-done"
-
-          # Issue 7
-          cat > /tmp/body7.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Must-have
-
-          **Notes :** `flutter_tts ^4.2.0` — speak / stop uniquement.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body7.md
-          gh issue create --repo $REPO \
-            --title "Text-to-Speech voix grave et lente (fr-FR)" \
-            --body-file /tmp/body7.md \
-            --label "must-have" --label "✅-done"
-
-          # Issue 8
-          cat > /tmp/body8.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Must-have
-
-          **Notes :** `HapticFeedback` + `SystemSound.click`.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body8.md
-          gh issue create --repo $REPO \
-            --title "Feedback haptique au début/fin d'enregistrement" \
-            --body-file /tmp/body8.md \
-            --label "must-have" --label "✅-done"
-
-          # Issue 9
-          cat > /tmp/body9.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Must-have
-          BODYEOF
-          sed -i 's/^          //' /tmp/body9.md
-          gh issue create --repo $REPO \
-            --title "Mode Expert — graphe spectral et données techniques simulés" \
-            --body-file /tmp/body9.md \
-            --label "must-have" --label "✅-done"
-
-          # Issue 10
-          cat > /tmp/body10.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Must-have
-
-          **Notes :** Détection automatique thème système.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body10.md
-          gh issue create --repo $REPO \
-            --title "Interface responsive (Android / iOS) avec thème sombre/clair auto" \
-            --body-file /tmp/body10.md \
-            --label "must-have" --label "🔴-todo"
-
-          # Issue 11
-          cat > /tmp/body11.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Must-have
-
-          **Notes :** Demandé même si micro non utilisé.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body11.md
-          gh issue create --repo $REPO \
-            --title "Gestion des permissions microphone" \
-            --body-file /tmp/body11.md \
-            --label "must-have" --label "🔴-todo"
-
-          # Issue 12
-          cat > /tmp/body12.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Must-have
-
-          **Notes :** SQLite local, 100 entrées affichées, rotation auto à 500.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body12.md
-          gh issue create --repo $REPO \
-            --title "Historique des traductions avec horodatage + suppression individuelle" \
-            --body-file /tmp/body12.md \
-            --label "must-have" --label "🔴-todo"
-
-          # Issue 13
-          cat > /tmp/body13.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Must-have
-
-          **Notes :** Export texte + capture écran avec watermark.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body13.md
-          gh issue create --repo $REPO \
-            --title "Partage social vers apps tierces (WhatsApp, Instagram…)" \
-            --body-file /tmp/body13.md \
-            --label "must-have" --label "🔴-todo"
-
-          # Issue 14
-          cat > /tmp/body14.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Nice-to-have
-
-          **Notes :** Renforcement immersion pseudo-scientifique.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body14.md
-          gh issue create --repo $REPO \
-            --title "Effets sonores d'ambiance — sons de laboratoire pendant l'analyse" \
-            --body-file /tmp/body14.md \
-            --label "nice-to-have" --label "🔴-todo"
-
-          # Issue 15
-          cat > /tmp/body15.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Nice-to-have
-
-          **Notes :** Whitelist caractères, filtre côté client.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body15.md
-          gh issue create --repo $REPO \
-            --title "Personnalisation des réponses — ajout manuel de phrases avec modération automatique" \
-            --body-file /tmp/body15.md \
-            --label "nice-to-have" --label "✅-done"
-
-          # Issue 16
-          cat > /tmp/body16.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Nice-to-have
-          BODYEOF
-          sed -i 's/^          //' /tmp/body16.md
-          gh issue create --repo $REPO \
-            --title "Personnalisation audio — choix voix TTS masculines/féminines" \
-            --body-file /tmp/body16.md \
-            --label "nice-to-have" --label "🔴-todo"
-
-          # Issue 17
-          cat > /tmp/body17.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Nice-to-have
-
-          **Notes :** Au-delà de la détection auto.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body17.md
-          gh issue create --repo $REPO \
-            --title "Thèmes visuels — animations de transition sombre/clair" \
-            --body-file /tmp/body17.md \
-            --label "nice-to-have" --label "🔴-todo"
-
-          # Issue 18
-          cat > /tmp/body18.md << 'BODYEOF'
-          **Statut :** ✅ Terminé
-
-          **Catégorie :** Nice-to-have
-
-          **Notes :** Colonne SQLite dédiée.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body18.md
-          gh issue create --repo $REPO \
-            --title "Favoris — système d'étoiles avec section dédiée" \
-            --body-file /tmp/body18.md \
-            --label "nice-to-have" --label "✅-done"
-
-          # Issue 19
-          cat > /tmp/body19.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Nice-to-have
-          BODYEOF
-          sed -i 's/^          //' /tmp/body19.md
-          gh issue create --repo $REPO \
-            --title "Statistiques — compteur par spécimen, phrases favorites, streaks quotidiens" \
-            --body-file /tmp/body19.md \
-            --label "nice-to-have" --label "🔴-todo"
-
-          # Issue 20
-          cat > /tmp/body20.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Nice-to-have
-          BODYEOF
-          sed -i 's/^          //' /tmp/body20.md
-          gh issue create --repo $REPO \
-            --title "Easter eggs — phrases rares (1% de probabilité)" \
-            --body-file /tmp/body20.md \
-            --label "nice-to-have" --label "🔴-todo"
-
-          # Issue 21
-          cat > /tmp/body21.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Nice-to-have
-          BODYEOF
-          sed -i 's/^          //' /tmp/body21.md
-          gh issue create --repo $REPO \
-            --title "Export de l'historique (format texte)" \
-            --body-file /tmp/body21.md \
-            --label "nice-to-have" --label "🔴-todo"
-
-          # Issue 22
-          cat > /tmp/body22.md << 'BODYEOF'
-          **Statut :** 🔴 Non commencé
-
-          **Catégorie :** Nice-to-have
-
-          **Notes :** Dernière traduction ou bouton accès rapide.
-          BODYEOF
-          sed -i 's/^          //' /tmp/body22.md
-          gh issue create --repo $REPO \
-            --title "Widgets écran d'accueil iOS/Android" \
-            --body-file /tmp/body22.md \
-            --label "nice-to-have" --label "🔴-todo"
-
-          echo "All issues created successfully!"
+      - name: Close test issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh issue close 6 --repo $REPO --reason "not planned" 2>/dev/null || true
+          gh issue close 7 --repo $REPO --reason "not planned" 2>/dev/null || true
+          echo "Done"
