@@ -38,7 +38,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 7 | Text-to-Speech voix grave et lente (fr-FR) | ✅ Terminé | `flutter_tts ^4.2.0` — speak / stop uniquement |
 | 8 | Feedback haptique au début/fin d'enregistrement | ✅ Terminé | `HapticFeedback` + `SystemSound.click` |
 | 9 | Mode Expert — graphe spectral et données techniques simulés | ✅ Terminé | |
-| 10 | Interface responsive (Android / iOS) avec thème sombre/clair auto | 🔴 Non commencé | Détection automatique thème système |
+| 10 | Interface responsive (Android / iOS) avec thème sombre/clair auto | 🟡 En cours | Détection automatique thème système |
 | 11 | Gestion des permissions microphone | 🔴 Non commencé | Demandé même si micro non utilisé |
 | 12 | Historique des traductions avec horodatage + suppression individuelle | 🔴 Non commencé | SQLite local, 100 entrées affichées, rotation auto à 500 |
 | 13 | Partage social vers apps tierces (WhatsApp, Instagram…) | 🔴 Non commencé | Export texte + capture écran avec watermark |
