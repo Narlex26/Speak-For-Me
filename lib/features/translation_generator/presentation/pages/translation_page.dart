@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speak_for_me/features/specimen_selection/domain/entities/specimen.dart';
 import 'package:speak_for_me/features/translation_generator/data/datasources/translation_service.dart';
@@ -70,6 +71,28 @@ class _TranslationPageState extends State<TranslationPage> {
   }
 
   void _startRecording() async {
+    // First, check if permission is permanently denied
+    final isPermanentlyDenied = await _audioService.isMicrophonePermissionPermanentlyDenied();
+    
+    if (isPermanentlyDenied) {
+      // User previously clicked "Don't Allow" or "Never Ask Again" - show error without asking again
+      if (mounted) {
+        _showPermissionErrorDialog();
+      }
+      return;
+    }
+
+    // Request permission (this will show the dialog if not already allowed)
+    final permissionGranted = await _audioService.requestMicrophonePermission();
+    
+    if (!permissionGranted) {
+      // Permission denied - show error dialog
+      if (mounted) {
+        _showPermissionErrorDialog();
+      }
+      return; // Don't start recording
+    }
+
     // Play start beep
     await _audioService.playBeep(isStart: true);
 
@@ -84,6 +107,34 @@ class _TranslationPageState extends State<TranslationPage> {
     if (mounted && _state == TranslationState.recording) {
       _startAnalysis();
     }
+  }
+
+  void _showPermissionErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Permission du microphone requise'),
+          content: const Text(
+            'L\'application nécessite l\'accès au microphone pour fonctionner. '
+            'Veuillez autoriser l\'accès au microphone dans les paramètres de votre appareil.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Fermer'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                openAppSettings();
+              },
+              child: const Text('Paramètres'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _stopRecording() {
