@@ -40,7 +40,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 9 | Mode Expert — graphe spectral et données techniques simulés | ✅ Terminé | |
 | 10 | Interface responsive (Android / iOS) avec thème sombre/clair auto | 🟡 En cours | Détection automatique thème système |
 | 11 | Gestion des permissions microphone | 🟡 En cours | Demandé même si micro non utilisé |
-| 12 | Historique des traductions avec horodatage + suppression individuelle | 🔴 Non commencé | SQLite local, 100 entrées affichées, rotation auto à 500 |
+| 12 | Historique des traductions avec horodatage + suppression individuelle | ✅ Terminé | SQLite local, 100 entrées affichées, rotation auto à 500 |
 | 13 | Partage social vers apps tierces (WhatsApp, Instagram…) | 🔴 Non commencé | Export texte + capture écran avec watermark |
 
 ### Nice-to-have
@@ -52,7 +52,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 16 | Personnalisation audio — choix voix TTS masculines/féminines | 🔴 Non commencé | |
 | 17 | Thèmes visuels — animations de transition sombre/clair | 🔴 Non commencé | Au-delà de la détection auto |
 | 18 | Favoris — système d'étoiles avec section dédiée | ✅ Terminé | Colonne SQLite dédiée |
-| 19 | Statistiques — compteur par spécimen, phrases favorites, streaks quotidiens | 🔴 Non commencé | |
+| 19 | Statistiques — compteur par spécimen, phrases favorites, streaks quotidiens | ✅ Terminé | |
 | 20 | Easter eggs — phrases rares (1% de probabilité) | 🔴 Non commencé | |
 | 21 | Export de l'historique (format texte) | 🔴 Non commencé | |
 | 22 | Widgets écran d'accueil iOS/Android | 🔴 Non commencé | Dernière traduction ou bouton accès rapide |

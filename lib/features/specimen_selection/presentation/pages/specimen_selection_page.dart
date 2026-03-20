@@ -4,6 +4,8 @@ import 'package:speak_for_me/features/specimen_selection/domain/entities/specime
 import 'package:speak_for_me/features/specimen_selection/presentation/widgets/specimen_card.dart';
 import 'package:speak_for_me/features/translation_generator/presentation/pages/translation_page.dart' as trans;
 import 'package:speak_for_me/features/favorites/presentation/pages/favorites_page.dart';
+import 'package:speak_for_me/features/statistics/presentation/pages/statistics_page.dart';
+import 'package:speak_for_me/features/history/presentation/pages/history_page.dart';
 
 class SpecimenSelectionPage extends StatelessWidget {
   const SpecimenSelectionPage({super.key});
@@ -27,7 +29,32 @@ class SpecimenSelectionPage extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 32),
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0, top: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.history, color: Color(0xFF667EEA)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HistoryPage()),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.bar_chart_rounded, color: Color(0xFF667EEA)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const StatisticsPage()),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
               // Header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),

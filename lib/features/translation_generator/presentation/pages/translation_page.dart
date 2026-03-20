@@ -16,6 +16,9 @@ import 'package:speak_for_me/features/expert_mode/presentation/widgets/technical
 import 'package:speak_for_me/features/expert_mode/presentation/widgets/expert_result_widget.dart';
 import 'package:speak_for_me/features/favorites/presentation/pages/favorites_page.dart';
 import 'package:speak_for_me/features/favorites/domain/usecases/favorite_usecases.dart';
+import 'package:speak_for_me/features/statistics/data/datasources/statistics_local_datasource.dart';
+import 'package:speak_for_me/features/history/data/datasources/history_local_datasource.dart';
+import 'package:speak_for_me/features/history/data/models/history_model.dart';
 
 enum TranslationState { idle, recording, analyzing, result }
 
@@ -32,6 +35,8 @@ class _TranslationPageState extends State<TranslationPage> {
   final TranslationService _translationService = TranslationService();
   final TtsService _ttsService = TtsService();
   final AudioService _audioService = AudioService();
+  final StatisticsLocalDataSource _statisticsDataSource = StatisticsLocalDataSource();
+  final HistoryLocalDataSource _historyDataSource = HistoryLocalDataSource();
 
   late AddFavoriteUseCase _addFavoriteUseCase;
   late RemoveFavoriteUseCase _removeFavoriteUseCase;
@@ -191,6 +196,18 @@ class _TranslationPageState extends State<TranslationPage> {
   void _showResult() async {
     final translation = _translationService.translate(widget.profile.type);
     final favoriteId = '${widget.profile.type}_${translation.hashCode}';
+
+    // Update statistics
+    await _statisticsDataSource.incrementSpecimenTranslation(widget.profile.name);
+
+    // Save to history
+    await _historyDataSource.createHistory(
+      HistoryModel(
+        profileType: widget.profile.name,
+        translatedText: translation,
+        timestamp: DateTime.now(),
+      ),
+    );
 
     // Check if already favorited
     final isFav = await _isFavoriteUseCase(favoriteId);
