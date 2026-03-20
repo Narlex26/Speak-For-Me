@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:speak_for_me/features/specimen_selection/domain/entities/specimen.dart';
 import 'package:speak_for_me/features/translation_generator/data/datasources/translation_service.dart';
 import 'package:speak_for_me/features/text_to_speech/data/datasources/tts_service.dart';
@@ -12,6 +13,8 @@ import '../widgets/translation_result.dart';
 import 'package:speak_for_me/features/expert_mode/presentation/widgets/spectral_graph_widget.dart';
 import 'package:speak_for_me/features/expert_mode/presentation/widgets/technical_data_widget.dart';
 import 'package:speak_for_me/features/expert_mode/presentation/widgets/expert_result_widget.dart';
+import 'package:speak_for_me/features/favorites/presentation/pages/favorites_page.dart';
+import 'package:speak_for_me/features/favorites/domain/usecases/favorite_usecases.dart';
 
 enum TranslationState { idle, recording, analyzing, result }
 
@@ -29,7 +32,12 @@ class _TranslationPageState extends State<TranslationPage> {
   final TtsService _ttsService = TtsService();
   final AudioService _audioService = AudioService();
 
+  late AddFavoriteUseCase _addFavoriteUseCase;
+  late RemoveFavoriteUseCase _removeFavoriteUseCase;
+  late IsFavoriteUseCase _isFavoriteUseCase;
+
   bool _isExpertMode = false;
+  bool _isFavorited = false;
   TranslationState _state = TranslationState.idle;
   String _analysisMessage = '';
   String _translatedText = '';
@@ -42,6 +50,14 @@ class _TranslationPageState extends State<TranslationPage> {
   void initState() {
     super.initState();
     _ttsService.initialize();
+    _initializeFavoritesUseCases();
+  }
+
+  Future<void> _initializeFavoritesUseCases() async {
+    final prefs = await SharedPreferences.getInstance();
+    _addFavoriteUseCase = AddFavoriteUseCase(prefs);
+    _removeFavoriteUseCase = RemoveFavoriteUseCase(prefs);
+    _isFavoriteUseCase = IsFavoriteUseCase(prefs);
   }
 
   @override
@@ -123,15 +139,78 @@ class _TranslationPageState extends State<TranslationPage> {
 
   void _showResult() async {
     final translation = _translationService.translate(widget.profile.type);
+    final favoriteId = '${widget.profile.type}_${translation.hashCode}';
+
+    // Check if already favorited
+    final isFav = await _isFavoriteUseCase(favoriteId);
 
     setState(() {
       _state = TranslationState.result;
       _translatedText = translation;
+      _isFavorited = isFav;
     });
 
     // Speak the result with TTS
     await Future.delayed(const Duration(milliseconds: 500));
     await _ttsService.speak(translation);
+  }
+
+  Future<void> _toggleFavorite() async {
+    final favoriteId = '${widget.profile.type}_${_translatedText.hashCode}';
+    
+    try {
+      if (_isFavorited) {
+        // Remove from favorites
+        await _removeFavoriteUseCase(favoriteId);
+        setState(() {
+          _isFavorited = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Supprimé des favoris'),
+              duration: Duration(seconds: 1),
+            ),
+          );
+        }
+      } else {
+        // Add to favorites
+        await _addFavoriteUseCase(
+          id: favoriteId,
+          text: _translatedText,
+          profileType: widget.profile.type.toString().split('.').last,
+        );
+        setState(() {
+          _isFavorited = true;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Ajouté aux favoris'),
+              duration: Duration(seconds: 1),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _openFavorites() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const FavoritesPage(),
+      ),
+    );
   }
 
   void _reset() {
@@ -140,27 +219,7 @@ class _TranslationPageState extends State<TranslationPage> {
       _state = TranslationState.idle;
       _translatedText = '';
       _progress = 0.0;
-    });
-  }
-
-  Future<void> _openAddPhraseSheet() async {
-    final added = await showAddPhraseBottomSheet(
-      context: context,
-      profile: widget.profile,
-      translationService: _translationService,
-    );
-
-    if (!mounted || added != true) {
-      return;
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Phrase ajoutee avec succes.'),
-      backgroundColor: Colors.green,
-    ));
-
-    setState(() {
-      // Refresh UI to reflect updated in-memory phrase list.
+      _isFavorited = false;
     });
   }
 
@@ -235,8 +294,9 @@ class _TranslationPageState extends State<TranslationPage> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+          // Favorites button
           GestureDetector(
-            onTap: _openAddPhraseSheet,
+            onTap: _openFavorites,
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
@@ -244,14 +304,14 @@ class _TranslationPageState extends State<TranslationPage> {
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.black12),
               ),
-              child: Icon(
-                Icons.add_rounded,
-                color: widget.profile.primaryColor,
+              child: const Icon(
+                Icons.favorite_border,
+                color: Colors.redAccent,
                 size: 24,
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           // Expert Mode Toggle
           GestureDetector(
             onTap: () {
@@ -439,7 +499,31 @@ class _TranslationPageState extends State<TranslationPage> {
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
+          // Favorite button
+          Container(
+            decoration: BoxDecoration(
+              color: _isFavorited ? Colors.redAccent : Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withValues(alpha: 0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: IconButton(
+              onPressed: _toggleFavorite,
+              icon: Icon(
+                _isFavorited ? Icons.favorite : Icons.favorite_border,
+                color: _isFavorited ? Colors.white : Colors.redAccent,
+              ),
+              padding: const EdgeInsets.all(16),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Play button
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
