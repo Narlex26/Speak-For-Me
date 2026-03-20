@@ -213,6 +213,27 @@ class _TranslationPageState extends State<TranslationPage> {
     );
   }
 
+  Future<void> _openAddPhraseSheet() async {
+    final added = await showAddPhraseBottomSheet(
+      context: context,
+      profile: widget.profile,
+      translationService: _translationService,
+    );
+
+    if (!mounted || added != true) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Phrase ajoutee avec succes.'),
+      backgroundColor: Colors.green,
+    ));
+
+    setState(() {
+      // Refresh UI to reflect updated in-memory phrase list.
+    });
+  }
+
   void _reset() {
     _ttsService.stop();
     setState(() {
@@ -294,6 +315,24 @@ class _TranslationPageState extends State<TranslationPage> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+          // Add Phrase button
+          GestureDetector(
+            onTap: _openAddPhraseSheet,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black12),
+              ),
+              child: Icon(
+                Icons.add_rounded,
+                color: widget.profile.primaryColor,
+                size: 24,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
           // Favorites button
           GestureDetector(
             onTap: _openFavorites,
