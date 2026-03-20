@@ -1,0 +1,186 @@
+name: Create Feature Issues from README
+
+on:
+  push:
+    branches:
+      - 'copilot/create-issues-for-features'
+  workflow_dispatch:
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Create labels and issues
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labels = [
+              { name: 'must-have',       color: 'e11d48', description: 'Must-have feature' },
+              { name: 'nice-to-have',    color: '7c3aed', description: 'Nice-to-have feature' },
+              { name: '✅-done',         color: '16a34a', description: 'Feature completed' },
+              { name: '🟡-in-progress',  color: 'ca8a04', description: 'Feature in progress' },
+              { name: '🔴-todo',         color: 'dc2626', description: 'Feature not started' },
+            ];
+
+            for (const label of labels) {
+              try {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  color: label.color,
+                  description: label.description,
+                });
+                console.log(`✅ Created label: ${label.name}`);
+              } catch (e) {
+                if (e.status === 422) {
+                  console.log(`⏭️  Label already exists: ${label.name}`);
+                } else {
+                  throw e;
+                }
+              }
+            }
+
+            const issues = [
+              // ── Must-have ──────────────────────────────────────────────────────────
+              {
+                title: 'Sélection du profil (Bébé, Chien, Chat, Poisson Rouge) avec animations',
+                body: '**Catégorie :** Must-have\n**Statut :** ✅ Terminé',
+                labels: ['must-have', '✅-done'],
+              },
+              {
+                title: 'Interface Material 3 avec dégradés et animations fluides',
+                body: '**Catégorie :** Must-have\n**Statut :** ✅ Terminé',
+                labels: ['must-have', '✅-done'],
+              },
+              {
+                title: "Bouton d'enregistrement avec animation de pulsation",
+                body: "**Catégorie :** Must-have\n**Statut :** ✅ Terminé",
+                labels: ['must-have', '✅-done'],
+              },
+              {
+                title: 'Simulation d\'analyse pseudo-scientifique — messages changeants + barre de progression',
+                body: '**Catégorie :** Must-have\n**Statut :** ✅ Terminé',
+                labels: ['must-have', '✅-done'],
+              },
+              {
+                title: "Effet Shimmer pendant l'analyse",
+                body: "**Catégorie :** Must-have\n**Statut :** ✅ Terminé",
+                labels: ['must-have', '✅-done'],
+              },
+              {
+                title: 'Génération aléatoire de phrases par profil',
+                body: '**Catégorie :** Must-have\n**Statut :** ✅ Terminé\n\n**Notes :** 15 phrases par profil, sélection purement aléatoire.',
+                labels: ['must-have', '✅-done'],
+              },
+              {
+                title: 'Text-to-Speech voix grave et lente (fr-FR)',
+                body: '**Catégorie :** Must-have\n**Statut :** ✅ Terminé\n\n**Notes :** `flutter_tts ^4.2.0` — speak / stop uniquement.',
+                labels: ['must-have', '✅-done'],
+              },
+              {
+                title: "Feedback haptique au début/fin d'enregistrement",
+                body: "**Catégorie :** Must-have\n**Statut :** ✅ Terminé\n\n**Notes :** `HapticFeedback` + `SystemSound.click`.",
+                labels: ['must-have', '✅-done'],
+              },
+              {
+                title: 'Mode Expert — graphe spectral et données techniques simulés',
+                body: '**Catégorie :** Must-have\n**Statut :** ✅ Terminé',
+                labels: ['must-have', '✅-done'],
+              },
+              {
+                title: 'Interface responsive (Android / iOS) avec thème sombre/clair auto',
+                body: '**Catégorie :** Must-have\n**Statut :** 🔴 Non commencé\n\n**Notes :** Détection automatique du thème système.',
+                labels: ['must-have', '🔴-todo'],
+              },
+              {
+                title: 'Gestion des permissions microphone',
+                body: "**Catégorie :** Must-have\n**Statut :** 🔴 Non commencé\n\n**Notes :** Demandé même si le micro n'est pas utilisé.",
+                labels: ['must-have', '🔴-todo'],
+              },
+              {
+                title: 'Historique des traductions avec horodatage + suppression individuelle',
+                body: '**Catégorie :** Must-have\n**Statut :** 🔴 Non commencé\n\n**Notes :** SQLite local, 100 entrées affichées, rotation automatique à 500.',
+                labels: ['must-have', '🔴-todo'],
+              },
+              {
+                title: 'Partage social vers apps tierces (WhatsApp, Instagram…)',
+                body: '**Catégorie :** Must-have\n**Statut :** 🔴 Non commencé\n\n**Notes :** Export texte + capture écran avec watermark.',
+                labels: ['must-have', '🔴-todo'],
+              },
+              // ── Nice-to-have ────────────────────────────────────────────────────────
+              {
+                title: "Effets sonores d'ambiance — sons de laboratoire pendant l'analyse",
+                body: "**Catégorie :** Nice-to-have\n**Statut :** 🔴 Non commencé\n\n**Notes :** Renforcement de l'immersion pseudo-scientifique.",
+                labels: ['nice-to-have', '🔴-todo'],
+              },
+              {
+                title: 'Personnalisation des réponses — ajout manuel de phrases avec modération automatique',
+                body: '**Catégorie :** Nice-to-have\n**Statut :** ✅ Terminé\n\n**Notes :** Whitelist de caractères, filtre côté client.',
+                labels: ['nice-to-have', '✅-done'],
+              },
+              {
+                title: 'Personnalisation audio — choix voix TTS masculines/féminines',
+                body: '**Catégorie :** Nice-to-have\n**Statut :** 🔴 Non commencé',
+                labels: ['nice-to-have', '🔴-todo'],
+              },
+              {
+                title: 'Thèmes visuels — animations de transition sombre/clair',
+                body: '**Catégorie :** Nice-to-have\n**Statut :** 🔴 Non commencé\n\n**Notes :** Au-delà de la détection automatique du thème système.',
+                labels: ['nice-to-have', '🔴-todo'],
+              },
+              {
+                title: "Favoris — système d'étoiles avec section dédiée",
+                body: '**Catégorie :** Nice-to-have\n**Statut :** ✅ Terminé\n\n**Notes :** Colonne SQLite dédiée.',
+                labels: ['nice-to-have', '✅-done'],
+              },
+              {
+                title: 'Statistiques — compteur par spécimen, phrases favorites, streaks quotidiens',
+                body: '**Catégorie :** Nice-to-have\n**Statut :** 🔴 Non commencé',
+                labels: ['nice-to-have', '🔴-todo'],
+              },
+              {
+                title: 'Easter eggs — phrases rares (1% de probabilité)',
+                body: '**Catégorie :** Nice-to-have\n**Statut :** 🔴 Non commencé',
+                labels: ['nice-to-have', '🔴-todo'],
+              },
+              {
+                title: "Export de l'historique (format texte)",
+                body: "**Catégorie :** Nice-to-have\n**Statut :** 🔴 Non commencé",
+                labels: ['nice-to-have', '🔴-todo'],
+              },
+              {
+                title: "Widgets écran d'accueil iOS/Android",
+                body: "**Catégorie :** Nice-to-have\n**Statut :** 🔴 Non commencé\n\n**Notes :** Dernière traduction ou bouton d'accès rapide.",
+                labels: ['nice-to-have', '🔴-todo'],
+              },
+            ];
+
+            const existingIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              per_page: 100,
+            });
+
+            const existingTitles = new Set(existingIssues.map(i => i.title));
+
+            for (const issue of issues) {
+              if (existingTitles.has(issue.title)) {
+                console.log(`⏭️  Issue already exists: "${issue.title}"`);
+                continue;
+              }
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issue.title,
+                body: issue.body,
+                labels: issue.labels,
+              });
+              console.log(`✅ Created issue #${created.data.number}: "${issue.title}"`);
+            }
+
+            console.log('🎉 Done! All 22 feature issues have been processed.');
