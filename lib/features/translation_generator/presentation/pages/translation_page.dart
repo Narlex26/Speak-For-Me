@@ -71,6 +71,7 @@ class _TranslationPageState extends State<TranslationPage> {
   void dispose() {
     _analysisTimer?.cancel();
     _progressTimer?.cancel();
+    _audioService.stopAnalysisAmbience();
     _ttsService.dispose();
     _audioService.dispose();
     super.dispose();
@@ -162,6 +163,8 @@ class _TranslationPageState extends State<TranslationPage> {
           : 'Analyse en cours...';
     });
 
+    await _audioService.startAnalysisAmbience();
+
     // Update progress
     _progressTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
       if (_progress < 1.0) {
@@ -188,6 +191,7 @@ class _TranslationPageState extends State<TranslationPage> {
 
     _analysisTimer?.cancel();
     _progressTimer?.cancel();
+    await _audioService.stopAnalysisAmbience();
 
     if (mounted) {
       _showResult();
@@ -195,6 +199,8 @@ class _TranslationPageState extends State<TranslationPage> {
   }
 
   void _showResult() async {
+    await _audioService.stopAnalysisAmbience();
+
     final translation = _translationService.translate(widget.profile.type);
     final favoriteId = '${widget.profile.type}_${translation.hashCode}';
 
@@ -305,6 +311,7 @@ class _TranslationPageState extends State<TranslationPage> {
 
   void _reset() {
     _ttsService.stop();
+    _audioService.stopAnalysisAmbience();
     setState(() {
       _state = TranslationState.idle;
       _translatedText = '';
