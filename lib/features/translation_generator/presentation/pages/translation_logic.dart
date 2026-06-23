@@ -16,6 +16,7 @@ mixin _TranslationLogic on State<TranslationPage> {
   // State
   bool _isExpertMode = false;
   bool _isFavorited = false;
+  bool _isLegendary = false;
   TranslationState _state = TranslationState.idle;
   String _analysisMessage = '';
   String _translatedText = '';
@@ -94,7 +95,8 @@ mixin _TranslationLogic on State<TranslationPage> {
       timestamp: DateTime.now(),
     ));
     final isFav = await _isFavoriteUseCase(favoriteId);
-    setState(() { _state = TranslationState.result; _translatedText = translation; _isFavorited = isFav; });
+    final legendary = _translationService.isLegendary(translation);
+    setState(() { _state = TranslationState.result; _translatedText = translation; _isFavorited = isFav; _isLegendary = legendary; });
     await Future.delayed(const Duration(milliseconds: 500));
     await _ttsService.speak(translation);
   }
@@ -128,7 +130,7 @@ mixin _TranslationLogic on State<TranslationPage> {
   void _reset() {
     _ttsService.stop();
     _audioService.stopAnalysisAmbience();
-    setState(() { _state = TranslationState.idle; _translatedText = ''; _progress = 0.0; _isFavorited = false; });
+    setState(() { _state = TranslationState.idle; _translatedText = ''; _progress = 0.0; _isFavorited = false; _isLegendary = false; });
   }
 
   void _shareResult() => Share.share(_translatedText, subject: 'Traduction ${widget.profile.name}');

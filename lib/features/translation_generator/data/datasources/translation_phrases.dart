@@ -1,6 +1,13 @@
 import '../../../specimen_selection/domain/entities/specimen.dart';
 
 class TranslationPhrases {
+  static const Map<ProfileType, String> legendaryPhrases = {
+    ProfileType.baby: "⭐ LÉGENDAIRE : Je suis venu en ce monde pour vous juger. Mon verdict : décevant, mais je reste.",
+    ProfileType.dog: "⭐ LÉGENDAIRE : Dans une vie antérieure j'étais un loup. Dans celle-ci, je pleure devant l'aspirateur.",
+    ProfileType.cat: "⭐ LÉGENDAIRE : J'ai calculé la probabilité que vous soyez dignes de ma présence. Le résultat : 0,3%. Vous avez de la chance.",
+    ProfileType.goldfish: "⭐ LÉGENDAIRE : Je... j'ai eu une révélation. J'ai compris le sens de l'existence. C'était... c'était... tiens, un château !",
+  };
+
   static const List<String> prohibitedWords = [
     'merde',
     'putain',

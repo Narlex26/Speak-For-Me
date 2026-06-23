@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 class TranslationResult extends StatefulWidget {
   final String text;
   final Color color;
+  final bool isLegendary;
 
   const TranslationResult({
     super.key,
     required this.text,
     required this.color,
+    this.isLegendary = false,
   });
 
   @override
@@ -83,27 +85,43 @@ class _TranslationResultState extends State<TranslationResult>
         margin: const EdgeInsets.all(48),
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: widget.isLegendary ? const Color(0xFFFFFDE7) : Colors.white,
           borderRadius: BorderRadius.circular(24),
+          gradient: widget.isLegendary
+              ? const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFFFFF9C4), Color(0xFFFFECB3)],
+                )
+              : null,
           boxShadow: [
             BoxShadow(
-              color: widget.color.withValues(alpha: 0.2),
-              blurRadius: 20,
+              color: widget.isLegendary
+                  ? const Color(0xFFFFD600).withValues(alpha: 0.5)
+                  : widget.color.withValues(alpha: 0.2),
+              blurRadius: widget.isLegendary ? 30 : 20,
               offset: const Offset(0, 10),
             ),
           ],
           border: Border.all(
-            color: widget.color.withValues(alpha: 0.3),
-            width: 2,
+            color: widget.isLegendary
+                ? const Color(0xFFFFD600)
+                : widget.color.withValues(alpha: 0.3),
+            width: widget.isLegendary ? 3 : 2,
           ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (widget.isLegendary) ...[
+              const Text('✨ TRADUCTION LÉGENDAIRE ✨',
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFF57F17), letterSpacing: 1.2)),
+              const SizedBox(height: 12),
+            ],
             Icon(
               Icons.format_quote_rounded,
               size: 32,
-              color: widget.color.withValues(alpha: 0.5),
+              color: widget.isLegendary ? const Color(0xFFFFB300) : widget.color.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 20),
             Text(

@@ -12,13 +12,20 @@ class TranslationService {
     ProfileType.goldfish: [],
   };
 
-  /// Returns a random phrase based on the profile type
+  /// Returns a random phrase based on the profile type.
+  /// 1% chance to return the legendary phrase for dramatic effect.
   String translate(ProfileType profileType) {
-    final phrases = getPhrases(profileType);
-    if (phrases.isEmpty) {
-      return "Erreur de traduction...";
+    if (_random.nextDouble() < 0.01) {
+      final legendary = TranslationPhrases.legendaryPhrases[profileType];
+      if (legendary != null) return legendary;
     }
+    final phrases = getPhrases(profileType);
+    if (phrases.isEmpty) return "Erreur de traduction...";
     return phrases[_random.nextInt(phrases.length)];
+  }
+
+  bool isLegendary(String phrase) {
+    return TranslationPhrases.legendaryPhrases.values.contains(phrase);
   }
 
   List<String> getPhrases(ProfileType profileType) {
