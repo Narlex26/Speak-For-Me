@@ -1,7 +1,10 @@
 import 'package:flutter/services.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AudioService {
+  final AudioPlayer _ambiencePlayer = AudioPlayer();
+
   /// Plays a beep sound using system haptic feedback and audio
   Future<void> playBeep({bool isStart = true}) async {
     try {
@@ -23,6 +26,27 @@ class AudioService {
     } catch (e) {
       // Silently fail if audio can't play - it's not critical
       print('Could not play beep: $e');
+    }
+  }
+
+  /// Plays a one-shot droid-like processing sound during analysis.
+  Future<void> startAnalysisAmbience() async {
+    try {
+      await _ambiencePlayer.stop();
+      await _ambiencePlayer.setReleaseMode(ReleaseMode.stop);
+      await _ambiencePlayer.setVolume(0.45);
+      await _ambiencePlayer.play(AssetSource('audio/audio_traitement.wav'));
+    } catch (e) {
+      print('Could not play analysis ambience: $e');
+    }
+  }
+
+  /// Stops analysis ambience playback.
+  Future<void> stopAnalysisAmbience() async {
+    try {
+      await _ambiencePlayer.stop();
+    } catch (e) {
+      print('Could not stop analysis ambience: $e');
     }
   }
 
@@ -66,7 +90,7 @@ class AudioService {
   }
 
   void dispose() {
-    // Nothing to dispose with this implementation
+    _ambiencePlayer.dispose();
   }
 }
 
