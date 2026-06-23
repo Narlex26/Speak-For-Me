@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Microphone permission -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Storage permission for file export (Android < 10) -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     
     <application
         android:label="speak_for_me"

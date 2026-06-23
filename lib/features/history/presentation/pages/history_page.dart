@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../data/datasources/history_local_datasource.dart';
 import '../../data/models/history_model.dart';
 import 'package:intl/intl.dart';
@@ -39,6 +44,86 @@ class _HistoryPageState extends State<HistoryPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Supprimé de l\'historique'), duration: Duration(seconds: 1)),
       );
+    }
+  }
+
+  Future<void> _exportHistory() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Télécharger l\'historique'),
+        content: const Text(
+          'Voulez-vous télécharger l\'historique des traductions en fichier texte ?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Télécharger'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    final dateFormatter = DateFormat('dd MMM yyyy à HH:mm', 'fr_FR');
+    final exportDate = DateFormat('dd MMMM yyyy à HH:mm', 'fr_FR').format(DateTime.now());
+
+    final buffer = StringBuffer();
+    buffer.writeln('Speak For Me — Historique des traductions');
+    buffer.writeln('Exporté le $exportDate');
+    buffer.writeln('=' * 42);
+    buffer.writeln();
+
+    for (final item in _historyList) {
+      buffer.writeln('[${item.profileType}] ${dateFormatter.format(item.timestamp)}');
+      buffer.writeln(item.translatedText);
+      buffer.writeln();
+    }
+
+    buffer.writeln('=' * 42);
+    buffer.writeln('${_historyList.length} traduction(s) au total');
+
+    try {
+      final content = buffer.toString();
+      final bytes = utf8.encode(content);
+
+      if (Platform.isAndroid) {
+        const channel = MethodChannel('com.example.speak_for_me/file_saver');
+        await channel.invokeMethod('saveToDownloads', {
+          'fileName': 'historique_speak_for_me.txt',
+          'content': Uint8List.fromList(bytes),
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Fichier sauvegardé dans Téléchargements'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      } else {
+        final dir = await getTemporaryDirectory();
+        final file = File('${dir.path}/historique_speak_for_me.txt');
+        await file.writeAsBytes(bytes);
+        await Share.shareXFiles(
+          [XFile(file.path, mimeType: 'text/plain')],
+          subject: 'Historique Speak For Me',
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur lors de l\'export : $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -97,12 +182,18 @@ class _HistoryPageState extends State<HistoryPage> {
       appBar: AppBar(
         title: const Text('Historique'),
         actions: [
-          if (_historyList.isNotEmpty)
+          if (_historyList.isNotEmpty) ...[
+            IconButton(
+              icon: const Icon(Icons.download_rounded),
+              onPressed: _exportHistory,
+              tooltip: 'Exporter en .txt',
+            ),
             IconButton(
               icon: const Icon(Icons.delete_sweep),
               onPressed: _clearAll,
               tooltip: 'Vider l\'historique',
             ),
+          ],
         ],
       ),
       body: _isLoading

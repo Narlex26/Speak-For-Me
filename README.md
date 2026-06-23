@@ -54,7 +54,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 18 | Favoris — système d'étoiles avec section dédiée | ✅ Terminé | Colonne SQLite dédiée |
 | 19 | Statistiques — compteur par spécimen, phrases favorites, streaks quotidiens | ✅ Terminé | |
 | 20 | Easter eggs — phrases rares (1% de probabilité) | 🔴 Non commencé | |
-| 21 | Export de l'historique (format texte) | 🔴 Non commencé | |
+| 21 | Export de l'historique (format texte) | ✅ Terminé | |
 | 22 | Widgets écran d'accueil iOS/Android | 🔴 Non commencé | Dernière traduction ou bouton accès rapide |
 
 ---
