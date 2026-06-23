@@ -19,6 +19,7 @@ mixin _TranslationLogic on State<TranslationPage> {
   TranslationState _state = TranslationState.idle;
   String _analysisMessage = '';
   String _translatedText = '';
+  bool _isEasterEgg = false;
   double _progress = 0.0;
   Timer? _analysisTimer;
   Timer? _progressTimer;
@@ -37,7 +38,7 @@ mixin _TranslationLogic on State<TranslationPage> {
     final permissionGranted = await _audioService.requestMicrophonePermission();
     if (!permissionGranted) { if (mounted) _showPermissionErrorDialog(); return; }
     await _audioService.playBeep(isStart: true);
-    setState(() { _state = TranslationState.recording; _translatedText = ''; });
+    setState(() { _state = TranslationState.recording; _translatedText = ''; _isEasterEgg = false; });
     await Future.delayed(const Duration(seconds: 2));
     if (mounted && _state == TranslationState.recording) _startAnalysis();
   }
@@ -85,7 +86,8 @@ mixin _TranslationLogic on State<TranslationPage> {
   }
 
   void _showResult() async {
-    final translation = _translationService.translate(widget.profile.type);
+    final result = _translationService.generateTranslation(widget.profile.type);
+    final translation = result.text;
     final favoriteId = '${widget.profile.type}_${translation.hashCode}';
     await _statisticsDataSource.incrementSpecimenTranslation(widget.profile.name);
     await _historyDataSource.createHistory(HistoryModel(
@@ -94,7 +96,7 @@ mixin _TranslationLogic on State<TranslationPage> {
       timestamp: DateTime.now(),
     ));
     final isFav = await _isFavoriteUseCase(favoriteId);
-    setState(() { _state = TranslationState.result; _translatedText = translation; _isFavorited = isFav; });
+    setState(() { _state = TranslationState.result; _translatedText = translation; _isEasterEgg = result.isEasterEgg; _isFavorited = isFav; });
     await Future.delayed(const Duration(milliseconds: 500));
     await _ttsService.speak(translation);
   }
@@ -128,7 +130,7 @@ mixin _TranslationLogic on State<TranslationPage> {
   void _reset() {
     _ttsService.stop();
     _audioService.stopAnalysisAmbience();
-    setState(() { _state = TranslationState.idle; _translatedText = ''; _progress = 0.0; _isFavorited = false; });
+    setState(() { _state = TranslationState.idle; _translatedText = ''; _isEasterEgg = false; _progress = 0.0; _isFavorited = false; });
   }
 
   void _shareResult() => Share.share(_translatedText, subject: 'Traduction ${widget.profile.name}');

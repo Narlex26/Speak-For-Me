@@ -77,5 +77,19 @@ class TranslationPhrases {
       "Bonjour le châ... qu'est-ce que je disais ?",
     ],
   };
+
+  /// Phrases « légendaires » ultra-rares (easter eggs, ~1% de chance).
+  /// Volontairement méta : elles brisent le 4e mur pour récompenser la chance.
+  /// Texte gardé « propre » (sans emoji) car il est aussi lu par le TTS et partagé.
+  static const List<String> easterEggs = [
+    "Félicitations, tu viens de déclencher une traduction légendaire. Statistiquement, tu aurais dû jouer au loto aujourd'hui.",
+    "Entre nous : personne ne traduit vraiment quoi que ce soit. Mais le spectacle est joli, non ?",
+    "Erreur 1 pour cent : pensée trop profonde pour être traduite. Réessaie dans une autre vie.",
+    "Une comète traverse le ciel. L'animal fait un vœu. C'était toi, son vœu.",
+    "Tu fais partie des un pour cent les plus chanceux. Profites-en, ça ne durera pas.",
+    "Mode légendaire activé. Cette phrase n'apparaît qu'une fois sur cent. Encadre-la.",
+    "L'animal a brièvement atteint l'illumination, puis a oublié pourquoi il était entré dans la pièce.",
+    "Cette traduction est si rare que même nous, on est surpris de la voir.",
+  ];
 }
 

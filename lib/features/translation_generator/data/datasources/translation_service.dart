@@ -21,6 +21,24 @@ class TranslationService {
     return phrases[_random.nextInt(phrases.length)];
   }
 
+  /// Probabilité qu'une traduction soit un easter egg « légendaire » (1%).
+  static const double easterEggProbability = 0.01;
+
+  /// Génère une traduction destinée à l'UI : avec [easterEggProbability] de
+  /// chance, renvoie une phrase légendaire (easter egg) ; sinon une phrase
+  /// normale du profil. Le flag [isEasterEgg] permet à l'UI d'afficher un
+  /// traitement spécial. [translate] reste volontairement « pur » (sans easter
+  /// egg) pour rester testable de façon déterministe.
+  ({String text, bool isEasterEgg}) generateTranslation(ProfileType profileType) {
+    if (TranslationPhrases.easterEggs.isNotEmpty &&
+        _random.nextDouble() < easterEggProbability) {
+      final egg = TranslationPhrases
+          .easterEggs[_random.nextInt(TranslationPhrases.easterEggs.length)];
+      return (text: egg, isEasterEgg: true);
+    }
+    return (text: translate(profileType), isEasterEgg: false);
+  }
+
   List<String> getPhrases(ProfileType profileType) {
     return [
       ...?TranslationPhrases.phrases[profileType],

@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 class TranslationResult extends StatefulWidget {
   final String text;
   final Color color;
+  final bool isEasterEgg;
 
   const TranslationResult({
     super.key,
     required this.text,
     required this.color,
+    this.isEasterEgg = false,
   });
 
   @override
@@ -65,6 +67,7 @@ class _TranslationResultState extends State<TranslationResult>
 
   @override
   Widget build(BuildContext context) {
+    final accent = widget.isEasterEgg ? const Color(0xFFD4AF37) : widget.color;
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -83,27 +86,64 @@ class _TranslationResultState extends State<TranslationResult>
         margin: const EdgeInsets.all(48),
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: widget.isEasterEgg ? null : Colors.white,
+          gradient: widget.isEasterEgg
+              ? const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFFFFFDF5), Color(0xFFFDF3D0)],
+                )
+              : null,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: widget.color.withValues(alpha: 0.2),
-              blurRadius: 20,
+              color: accent.withValues(alpha: widget.isEasterEgg ? 0.4 : 0.2),
+              blurRadius: widget.isEasterEgg ? 28 : 20,
               offset: const Offset(0, 10),
             ),
           ],
           border: Border.all(
-            color: widget.color.withValues(alpha: 0.3),
-            width: 2,
+            color: accent.withValues(alpha: widget.isEasterEgg ? 0.6 : 0.3),
+            width: widget.isEasterEgg ? 2.5 : 2,
           ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (widget.isEasterEgg) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFD4AF37), Color(0xFFF4D03F)],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.auto_awesome, size: 16, color: Colors.white),
+                    SizedBox(width: 6),
+                    Text(
+                      'PHRASE LÉGENDAIRE',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    SizedBox(width: 6),
+                    Icon(Icons.auto_awesome, size: 16, color: Colors.white),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
             Icon(
               Icons.format_quote_rounded,
               size: 32,
-              color: widget.color.withValues(alpha: 0.5),
+              color: accent.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 20),
             Text(
@@ -120,7 +160,7 @@ class _TranslationResultState extends State<TranslationResult>
             Icon(
               Icons.format_quote_rounded,
               size: 32,
-              color: widget.color.withValues(alpha: 0.5),
+              color: accent.withValues(alpha: 0.5),
             ),
           ],
         ),

@@ -71,6 +71,29 @@ void main() {
       expect(available, contains(translation));
     });
 
+    test('generateTranslation flags easter eggs correctly and uses the right pools', () {
+      final eggs = TranslationPhrases.easterEggs;
+      expect(eggs, isNotEmpty);
+
+      final normalPhrases = service.getPhrases(ProfileType.cat);
+      var sawEasterEgg = false;
+
+      // 100k tirages à 1% : un easter egg doit forcément apparaître
+      // (proba de n'en voir aucun ≈ 0.99^100000 ≈ 0), donc non flaky.
+      for (var i = 0; i < 100000; i++) {
+        final result = service.generateTranslation(ProfileType.cat);
+        if (result.isEasterEgg) {
+          sawEasterEgg = true;
+          expect(eggs, contains(result.text));
+        } else {
+          expect(normalPhrases, contains(result.text));
+        }
+      }
+
+      expect(sawEasterEgg, isTrue,
+          reason: 'Sur 100k tirages à 1%, au moins un easter egg doit sortir');
+    });
+
     test('getRandomAnalysisMessage returns fallback for empty profile messages', () {
       const emptyProfile = Profile(
         type: ProfileType.baby,
