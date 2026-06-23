@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../domain/entities/favorite_tts.dart';
 import '../../domain/usecases/favorite_usecases.dart';
 import '../../../text_to_speech/data/datasources/tts_service.dart';
-import '../widgets/favorite_card.dart';
+import '../widgets/favorites_body.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
@@ -44,11 +43,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
         _isLoading = true;
         _errorMessage = null;
       });
-
       final favorites = await _getFavoritesUseCase();
-      // Sort by creation date - most recent first
       favorites.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
       setState(() {
         _favorites = favorites;
         _isLoading = false;
@@ -67,10 +63,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
       _loadFavorites();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Favori supprimé'),
-            duration: Duration(seconds: 2),
-          ),
+          const SnackBar(content: Text('Favori supprimé'), duration: Duration(seconds: 2)),
         );
       }
     } catch (e) {
@@ -88,10 +81,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Erreur de lecture: $e'),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text('Erreur de lecture: $e'), backgroundColor: Colors.red),
         );
       }
     }
@@ -111,11 +101,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         backgroundColor: Colors.deepPurple,
         title: const Text(
           'Mes Favoris',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         leading: IconButton(
@@ -123,106 +109,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: _buildBody(),
-    );
-  }
-
-  Widget _buildBody() {
-    if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
-        ),
-      );
-    }
-
-    if (_errorMessage != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const FaIcon(
-              FontAwesomeIcons.triangleExclamation,
-              size: 48,
-              color: Colors.red,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              _errorMessage!,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, color: Colors.red),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _loadFavorites,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-              ),
-              child: const Text('Réessayer'),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (_favorites.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FaIcon(
-              FontAwesomeIcons.heart,
-              size: 64,
-              color: Colors.grey.shade300,
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'Aucun favori',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey.shade600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Ajoutez des textes à vos favoris\npour les retrouver ici',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back),
-              label: const Text('Retour'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 12,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: _loadFavorites,
-      color: Colors.deepPurple,
-      child: ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: _favorites.length,
-        itemBuilder: (context, index) {
-          final favorite = _favorites[index];
-          return FavoriteCard(
-            favorite: favorite,
-            onReListen: () => _reListen(favorite.text),
-            onDelete: () => _deleteFavorite(favorite.id),
-          );
-        },
+      body: FavoritesBody(
+        isLoading: _isLoading,
+        errorMessage: _errorMessage,
+        favorites: _favorites,
+        onRetry: _loadFavorites,
+        onGoBack: () => Navigator.pop(context),
+        onDelete: _deleteFavorite,
+        onReListen: _reListen,
       ),
     );
   }

@@ -129,7 +129,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

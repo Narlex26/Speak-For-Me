@@ -25,8 +25,8 @@ class ShimmerLoader extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Shimmer.fromColors(
-              baseColor: baseColor.withOpacity(0.4),
-              highlightColor: baseColor.withOpacity(0.9),
+              baseColor: baseColor.withValues(alpha:0.4),
+              highlightColor: baseColor.withValues(alpha:0.9),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -61,7 +61,7 @@ class ShimmerLoader extends StatelessWidget {
                     height: 8,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [baseColor, baseColor.withOpacity(0.7)],
+                        colors: [baseColor, baseColor.withValues(alpha:0.7)],
                       ),
                       borderRadius: BorderRadius.circular(4),
                     ),

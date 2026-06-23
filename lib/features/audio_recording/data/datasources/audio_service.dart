@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -25,7 +26,7 @@ class AudioService {
       await SystemSound.play(SystemSoundType.click);
     } catch (e) {
       // Silently fail if audio can't play - it's not critical
-      print('Could not play beep: $e');
+      debugPrint('Could not play beep: $e');
     }
   }
 
@@ -37,7 +38,7 @@ class AudioService {
       await _ambiencePlayer.setVolume(0.45);
       await _ambiencePlayer.play(AssetSource('audio/audio_traitement.wav'));
     } catch (e) {
-      print('Could not play analysis ambience: $e');
+      debugPrint('Could not play analysis ambience: $e');
     }
   }
 
@@ -46,7 +47,7 @@ class AudioService {
     try {
       await _ambiencePlayer.stop();
     } catch (e) {
-      print('Could not stop analysis ambience: $e');
+      debugPrint('Could not stop analysis ambience: $e');
     }
   }
 
@@ -61,7 +62,7 @@ class AudioService {
       final status = await Permission.microphone.request();
       return status.isGranted;
     } catch (e) {
-      print('Error requesting microphone permission: $e');
+      debugPrint('Error requesting microphone permission: $e');
       return false;
     }
   }
@@ -73,7 +74,7 @@ class AudioService {
       final status = await Permission.microphone.status;
       return status.isDenied && status.isPermanentlyDenied;
     } catch (e) {
-      print('Error checking if permission is permanently denied: $e');
+      debugPrint('Error checking if permission is permanently denied: $e');
       return false;
     }
   }
@@ -84,7 +85,7 @@ class AudioService {
     try {
       return await Permission.microphone.status;
     } catch (e) {
-      print('Error checking microphone permission: $e');
+      debugPrint('Error checking microphone permission: $e');
       return PermissionStatus.denied;
     }
   }

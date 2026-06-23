@@ -75,9 +75,9 @@ class _SpectralGraphWidgetState extends State<SpectralGraphWidget> {
       height: 150,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.8),
+        color: Colors.black.withValues(alpha:0.8),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: widget.baseColor.withOpacity(0.5)),
+        border: Border.all(color: widget.baseColor.withValues(alpha:0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +116,7 @@ class _SpectralGraphWidgetState extends State<SpectralGraphWidget> {
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 1),
                       decoration: BoxDecoration(
-                        color: widget.baseColor.withOpacity(0.7),
+                        color: widget.baseColor.withValues(alpha:0.7),
                         borderRadius: const BorderRadius.vertical(top: Radius.circular(2)),
                       ),
                     ),

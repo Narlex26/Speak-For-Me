@@ -29,7 +29,7 @@ class SpecimenCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: profile.primaryColor.withOpacity(0.4),
+              color: profile.primaryColor.withValues(alpha:0.4),
               blurRadius: 12,
               offset: const Offset(0, 6),
             ),
@@ -40,7 +40,7 @@ class SpecimenCard extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(24),
-            splashColor: Colors.white.withOpacity(0.3),
+            splashColor: Colors.white.withValues(alpha:0.3),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: SingleChildScrollView(

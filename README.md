@@ -40,7 +40,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 | 9 | Mode Expert — graphe spectral et données techniques simulés | ✅ Terminé | |
 | 10 | Interface responsive (Android / iOS) avec thème sombre/clair auto | 🟡 En cours | Détection automatique thème système |
 | 11 | Gestion des permissions microphone | ✅ Terminé | Demandé même si micro non utilisé |
-| 12 | Historique des traductions avec horodatage + suppression individuelle | 🔴 Non commencé | SQLite local, 100 entrées affichées, rotation auto à 500 |
+| 12 | Historique des traductions avec horodatage + suppression individuelle | ✅ Terminé | SQLite local, 100 entrées affichées, rotation auto à 500 |
 | 13 | Partage social vers apps tierces (WhatsApp, Instagram…) | ✅ Terminé | Export texte + capture écran avec watermark |
 
 ### Nice-to-have
@@ -102,8 +102,10 @@ lib/
     ├── translation_generator/ # Phrases + logique de traduction
     ├── text_to_speech/       # TTS
     ├── expert_mode/          # Graphe spectral et données simulés
-    ├── history/              # Non implémenté
-    └── sharing/              # Non implémenté
+    ├── history/              # Historique + export
+    ├── favorites/            # Favoris SQLite
+    ├── statistics/           # Statistiques par profil
+    └── sharing/              # Partage social
 ```
 
 Chaque feature suit le pattern : `data/datasources/` → `domain/entities/` → `presentation/pages/` + `widgets/`.

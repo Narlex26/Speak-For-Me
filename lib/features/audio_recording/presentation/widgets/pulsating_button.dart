@@ -83,7 +83,7 @@ class _PulsatingButtonState extends State<PulsatingButton>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: widget.color.withOpacity(_opacityAnimation.value),
+                    color: widget.color.withValues(alpha:_opacityAnimation.value),
                     width: 4,
                   ),
                 ),
@@ -103,7 +103,7 @@ class _PulsatingButtonState extends State<PulsatingButton>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: widget.color.withOpacity(delayedOpacity),
+                    color: widget.color.withValues(alpha:delayedOpacity),
                     width: 3,
                   ),
                 ),
