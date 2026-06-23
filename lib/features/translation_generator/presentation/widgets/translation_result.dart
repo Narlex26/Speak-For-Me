@@ -80,8 +80,8 @@ class _TranslationResultState extends State<TranslationResult>
         );
       },
       child: Container(
-        margin: const EdgeInsets.all(24),
-        padding: const EdgeInsets.all(24),
+        margin: const EdgeInsets.all(48),
+        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
@@ -105,7 +105,7 @@ class _TranslationResultState extends State<TranslationResult>
               size: 32,
               color: widget.color.withValues(alpha: 0.5),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Text(
               widget.text,
               style: GoogleFonts.merriweather(
@@ -116,7 +116,7 @@ class _TranslationResultState extends State<TranslationResult>
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Icon(
               Icons.format_quote_rounded,
               size: 32,

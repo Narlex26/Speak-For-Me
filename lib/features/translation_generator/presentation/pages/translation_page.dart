@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:speak_for_me/features/specimen_selection/domain/entities/specimen.dart';
 import 'package:speak_for_me/features/translation_generator/data/datasources/translation_service.dart';
 import 'package:speak_for_me/features/text_to_speech/data/datasources/tts_service.dart';
@@ -492,7 +493,7 @@ class _TranslationPageState extends State<TranslationPage> {
         // Status text
         _buildStatusText(),
 
-        const SizedBox(height: 40),
+        const SizedBox(height: 20),
 
         _buildMainTranslationArea(),
 
@@ -594,73 +595,119 @@ class _TranslationPageState extends State<TranslationPage> {
   Widget _buildResultActions() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: ElevatedButton.icon(
-              onPressed: _reset,
-              icon: const Icon(Icons.refresh_rounded),
-              label: const Text('Nouvelle traduction'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: widget.profile.primaryColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
+          // Top row with Favorite, Play, Share buttons (aligned right)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              // Favorite button
+              Container(
+                decoration: BoxDecoration(
+                  color: _isFavorited ? Colors.redAccent : Colors.white,
                   borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withValues(alpha: 0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                elevation: 4,
-                shadowColor: widget.profile.primaryColor.withValues(alpha: 0.4),
+                child: IconButton(
+                  onPressed: _toggleFavorite,
+                  icon: Icon(
+                    _isFavorited ? Icons.favorite : Icons.favorite_border,
+                    color: _isFavorited ? Colors.white : Colors.redAccent,
+                  ),
+                  padding: const EdgeInsets.all(16),
+                ),
               ),
-            ),
+              const SizedBox(width: 12),
+              // Play button
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withValues(alpha: 0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: IconButton(
+                  onPressed: () => _ttsService.speak(_translatedText),
+                  icon: Icon(
+                    Icons.volume_up_rounded,
+                    color: widget.profile.primaryColor,
+                  ),
+                  padding: const EdgeInsets.all(16),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Share button
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withValues(alpha: 0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: IconButton(
+                  onPressed: _shareResult,
+                  icon: Icon(
+                    Icons.share_rounded,
+                    color: widget.profile.primaryColor,
+                  ),
+                  padding: const EdgeInsets.all(16),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          // Favorite button
-          Container(
-            decoration: BoxDecoration(
-              color: _isFavorited ? Colors.redAccent : Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
+          const SizedBox(height: 16),
+          // Bottom row with "Nouvelle traduction" button (centered)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 220,
+                child: ElevatedButton.icon(
+                  onPressed: _reset,
+                  icon: const Icon(Icons.refresh_rounded),
+                  label: const Text(
+                    'Nouvelle traduction',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: widget.profile.primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 4,
+                    shadowColor: widget.profile.primaryColor.withValues(alpha: 0.4),
+                  ),
                 ),
-              ],
-            ),
-            child: IconButton(
-              onPressed: _toggleFavorite,
-              icon: Icon(
-                _isFavorited ? Icons.favorite : Icons.favorite_border,
-                color: _isFavorited ? Colors.white : Colors.redAccent,
               ),
-              padding: const EdgeInsets.all(16),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Play button
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.2),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: IconButton(
-              onPressed: () => _ttsService.speak(_translatedText),
-              icon: Icon(
-                Icons.volume_up_rounded,
-                color: widget.profile.primaryColor,
-              ),
-              padding: const EdgeInsets.all(16),
-            ),
+            ],
           ),
         ],
       ),
+    );
+  }
+
+  void _shareResult() {
+    Share.share(
+      _translatedText,
+      subject: 'Traduction ${widget.profile.name}',
     );
   }
 }
