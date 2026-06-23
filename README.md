@@ -47,7 +47,7 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 
 | # | Fonctionnalité | Statut | Notes |
 |---|----------------|--------|-------|
-| 14 | Effets sonores d'ambiance — sons de laboratoire pendant l'analyse | 🔴 Non commencé | Renforcement immersion pseudo-scientifique |
+| 14 | Effets sonores d'ambiance — sons de laboratoire pendant l'analyse | ✅ Terminé | Renforcement immersion pseudo-scientifique |
 | 15 | Personnalisation des réponses — ajout manuel de phrases avec modération automatique | 🔴 Non commencé | Whitelist caractères, filtre côté client |
 | 16 | Personnalisation audio — choix voix TTS masculines/féminines | 🔴 Non commencé | |
 | 17 | Thèmes visuels — animations de transition sombre/clair | 🔴 Non commencé | Au-delà de la détection auto |
