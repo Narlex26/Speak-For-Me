@@ -122,7 +122,7 @@ class _TranslationPageState extends State<TranslationPage> with _TranslationLogi
             Expanded(
               child: SingleChildScrollView(
                 child: Column(children: [
-                  TranslationResult(text: _translatedText, color: widget.profile.primaryColor),
+                  TranslationResult(text: _translatedText, color: widget.profile.primaryColor, isLegendary: _isLegendary),
                   if (_isExpertMode) ...[const SizedBox(height: 24), ExpertResultWidget(color: widget.profile.primaryColor)],
                 ]),
               ),
