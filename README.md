@@ -49,13 +49,13 @@ Une application mobile Flutter humoristique qui "traduit" les bébés et les ani
 |---|----------------|--------|-------|
 | 14 | Effets sonores d'ambiance — sons de laboratoire pendant l'analyse | ✅ Terminé | Renforcement immersion pseudo-scientifique |
 | 15 | Personnalisation des réponses — ajout manuel de phrases avec modération automatique | ✅ Terminé | Whitelist caractères, filtre côté client |
-| 16 | Personnalisation audio — choix voix TTS masculines/féminines | 🔴 Non commencé | |
-| 17 | Thèmes visuels — animations de transition sombre/clair | 🔴 Non commencé | Au-delà de la détection auto |
+| 16 | Personnalisation audio — choix voix TTS masculines/féminines | 🟡 En cours | |
+| 17 | Thèmes visuels — animations de transition sombre/clair | 🟡 En cours | Au-delà de la détection auto |
 | 18 | Favoris — système d'étoiles avec section dédiée | ✅ Terminé | Colonne SQLite dédiée |
 | 19 | Statistiques — compteur par spécimen, phrases favorites, streaks quotidiens | ✅ Terminé | |
 | 20 | Easter eggs — phrases rares (1% de probabilité) | ✅ Terminé | Phrase « légendaire » à 1% avec carte dorée dédiée |
 | 21 | Export de l'historique (format texte) | ✅ Terminé | |
-| 22 | Widgets écran d'accueil iOS/Android | 🔴 Non commencé | Dernière traduction ou bouton accès rapide |
+| 22 | Widgets écran d'accueil iOS/Android | 🟡 En cours | Dernière traduction ou bouton accès rapide |
 
 ---
 
@@ -120,3 +120,4 @@ Consultez [CONTRIBUTING.md](CONTRIBUTING.md) pour savoir comment contribuer.
 ## 📄 Licence
 
 Projet créé pour le fun ! 🎉
+
