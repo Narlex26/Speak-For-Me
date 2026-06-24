@@ -24,11 +24,7 @@ class FavoriteCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.blue.shade50, Colors.purple.shade50],
-            ),
+            color: Theme.of(context).colorScheme.surfaceContainerLow,
           ),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -54,10 +50,10 @@ class FavoriteCard extends StatelessWidget {
                             favorite.text,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Colors.black87,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         ],

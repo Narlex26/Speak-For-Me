@@ -60,7 +60,7 @@ class _TranslationPageState extends State<TranslationPage> with _TranslationLogi
             colors: [
               widget.profile.primaryColor.withValues(alpha: 0.1),
               widget.profile.secondaryColor.withValues(alpha: 0.05),
-              Colors.white,
+              Theme.of(context).colorScheme.surface,
             ],
           ),
         ),

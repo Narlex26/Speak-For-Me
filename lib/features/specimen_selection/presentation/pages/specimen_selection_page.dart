@@ -15,14 +15,15 @@ class SpecimenSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profiles = Profile.getAllProfiles();
+    final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFFF8F9FA), Color(0xFFE9ECEF)],
+            colors: [cs.surface, cs.surfaceContainerHighest],
           ),
         ),
         child: SafeArea(

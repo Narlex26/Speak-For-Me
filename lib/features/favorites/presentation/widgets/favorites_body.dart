@@ -26,9 +26,9 @@ class FavoritesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+          valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
         ),
       );
     }
@@ -48,7 +48,7 @@ class FavoritesBody extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: onRetry,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+              style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
               child: const Text('Réessayer'),
             ),
           ],
@@ -83,7 +83,7 @@ class FavoritesBody extends StatelessWidget {
               icon: const Icon(Icons.arrow_back),
               label: const Text('Retour'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               ),
@@ -95,7 +95,7 @@ class FavoritesBody extends StatelessWidget {
 
     return RefreshIndicator(
       onRefresh: () async => onRetry(),
-      color: Colors.deepPurple,
+      color: Theme.of(context).colorScheme.primary,
       child: ListView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: favorites.length,

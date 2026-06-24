@@ -22,6 +22,7 @@ class TranslationAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -31,11 +32,11 @@ class TranslationAppBar extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: cs.surface,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withValues(alpha: 0.1),
+                    color: cs.shadow.withValues(alpha: 0.08),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -48,7 +49,7 @@ class TranslationAppBar extends StatelessWidget {
           Expanded(
             child: Text(
               'Traducteur ${profile.name}',
-              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87),
+              style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: cs.onSurface),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -61,9 +62,9 @@ class TranslationAppBar extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isExpertMode ? Colors.black87 : Colors.white,
+                color: isExpertMode ? cs.inverseSurface : cs.surface,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.black12),
+                border: Border.all(color: cs.outline.withValues(alpha: 0.3)),
               ),
               child: Icon(Icons.science, color: isExpertMode ? Colors.greenAccent : Colors.grey, size: 24),
             ),
@@ -83,14 +84,15 @@ class _AppBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cs.surface,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.black12),
+          border: Border.all(color: cs.outline.withValues(alpha: 0.3)),
         ),
         child: Icon(icon, color: color, size: 24),
       ),
