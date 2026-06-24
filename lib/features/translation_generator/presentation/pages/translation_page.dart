@@ -60,7 +60,7 @@ class _TranslationPageState extends State<TranslationPage> with _TranslationLogi
             colors: [
               widget.profile.primaryColor.withValues(alpha: 0.1),
               widget.profile.secondaryColor.withValues(alpha: 0.05),
-              Colors.white,
+              Theme.of(context).colorScheme.surface,
             ],
           ),
         ),
@@ -122,7 +122,7 @@ class _TranslationPageState extends State<TranslationPage> with _TranslationLogi
             Expanded(
               child: SingleChildScrollView(
                 child: Column(children: [
-                  TranslationResult(text: _translatedText, color: widget.profile.primaryColor),
+                  TranslationResult(text: _translatedText, color: widget.profile.primaryColor, isLegendary: _isLegendary),
                   if (_isExpertMode) ...[const SizedBox(height: 24), ExpertResultWidget(color: widget.profile.primaryColor)],
                 ]),
               ),

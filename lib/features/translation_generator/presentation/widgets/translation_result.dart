@@ -85,7 +85,9 @@ class _TranslationResultState extends State<TranslationResult>
         margin: const EdgeInsets.all(48),
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
         decoration: BoxDecoration(
-          color: widget.isLegendary ? const Color(0xFFFFFDE7) : Colors.white,
+          color: widget.isLegendary
+              ? const Color(0xFFFFFDE7)
+              : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(24),
           gradient: widget.isLegendary
               ? const LinearGradient(

@@ -24,11 +24,11 @@ Future<bool?> showAddPhraseBottomSheet({
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(sheetContext).colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
+                color: Theme.of(sheetContext).colorScheme.shadow.withValues(alpha: 0.08),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),

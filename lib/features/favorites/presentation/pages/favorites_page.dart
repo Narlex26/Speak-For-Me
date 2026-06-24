@@ -98,14 +98,18 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.deepPurple,
-        title: const Text(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: Text(
           'Mes Favoris',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.onPrimary),
           onPressed: () => Navigator.pop(context),
         ),
       ),

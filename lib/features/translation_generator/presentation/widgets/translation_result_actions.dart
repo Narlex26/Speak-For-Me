@@ -30,21 +30,23 @@ class TranslationResultActions extends StatelessWidget {
               _IconActionButton(
                 icon: isFavorited ? Icons.favorite : Icons.favorite_border,
                 iconColor: isFavorited ? Colors.white : Colors.redAccent,
-                backgroundColor: isFavorited ? Colors.redAccent : Colors.white,
+                backgroundColor: isFavorited
+                    ? Colors.redAccent
+                    : Theme.of(context).colorScheme.surface,
                 onPressed: onToggleFavorite,
               ),
               const SizedBox(width: 12),
               _IconActionButton(
                 icon: Icons.volume_up_rounded,
                 iconColor: primaryColor,
-                backgroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 onPressed: onSpeak,
               ),
               const SizedBox(width: 12),
               _IconActionButton(
                 icon: Icons.share_rounded,
                 iconColor: primaryColor,
-                backgroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 onPressed: onShare,
               ),
             ],
