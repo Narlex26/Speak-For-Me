@@ -148,4 +148,3 @@ class _TranslationResultState extends State<TranslationResult>
     );
   }
 }
-
