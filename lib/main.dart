@@ -24,20 +24,53 @@ Future<void> main() async {
   runApp(const SpeakForMeApp());
 }
 
-class SpeakForMeApp extends StatelessWidget {
+class ThemeController extends InheritedNotifier<ValueNotifier<ThemeMode>> {
+  const ThemeController({
+    super.key,
+    required ValueNotifier<ThemeMode> notifier,
+    required super.child,
+  }) : super(notifier: notifier);
+
+  static ValueNotifier<ThemeMode> of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<ThemeController>()!
+        .notifier!;
+  }
+}
+
+class SpeakForMeApp extends StatefulWidget {
   const SpeakForMeApp({super.key});
+
+  @override
+  State<SpeakForMeApp> createState() => _SpeakForMeAppState();
+}
+
+class _SpeakForMeAppState extends State<SpeakForMeApp> {
+  final _themeMode = ValueNotifier<ThemeMode>(ThemeMode.system);
 
   static const _seedColor = Color(0xFF667EEA);
 
   @override
+  void dispose() {
+    _themeMode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Speak for Me',
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: _buildTheme(Brightness.light),
-      darkTheme: _buildTheme(Brightness.dark),
-      home: const SpecimenSelectionPage(),
+    return ThemeController(
+      notifier: _themeMode,
+      child: ValueListenableBuilder<ThemeMode>(
+        valueListenable: _themeMode,
+        builder: (context, mode, _) => MaterialApp(
+          title: 'Speak for Me',
+          debugShowCheckedModeBanner: false,
+          themeMode: mode,
+          theme: _buildTheme(Brightness.light),
+          darkTheme: _buildTheme(Brightness.dark),
+          home: const SpecimenSelectionPage(),
+        ),
+      ),
     );
   }
 

@@ -8,14 +8,25 @@ import 'package:speak_for_me/features/translation_generator/presentation/pages/t
 import 'package:speak_for_me/features/favorites/presentation/pages/favorites_page.dart';
 import 'package:speak_for_me/features/statistics/presentation/pages/statistics_page.dart';
 import 'package:speak_for_me/features/history/presentation/pages/history_page.dart';
+import 'package:speak_for_me/main.dart';
 
 class SpecimenSelectionPage extends StatelessWidget {
   const SpecimenSelectionPage({super.key});
+
+  void _toggleTheme(BuildContext context) {
+    final notifier = ThemeController.of(context);
+    notifier.value = switch (notifier.value) {
+      ThemeMode.light => ThemeMode.dark,
+      ThemeMode.dark => ThemeMode.light,
+      ThemeMode.system => ThemeMode.dark,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
     final profiles = Profile.getAllProfiles();
     final cs = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: Container(
@@ -34,6 +45,14 @@ class SpecimenSelectionPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    IconButton(
+                      icon: Icon(
+                        isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+                        color: const Color(0xFF667EEA),
+                      ),
+                      tooltip: isDark ? 'Mode clair' : 'Mode sombre',
+                      onPressed: () => _toggleTheme(context),
+                    ),
                     IconButton(
                       icon: const Icon(Icons.history, color: Color(0xFF667EEA)),
                       onPressed: () => Navigator.push(context,
