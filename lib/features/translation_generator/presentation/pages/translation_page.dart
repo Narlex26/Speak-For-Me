@@ -100,6 +100,15 @@ class _TranslationPageState extends State<TranslationPage> with _TranslationLogi
       );
     }
     final (text, icon) = _statusInfo;
+    if (_state == TranslationState.result) {
+      return Column(
+        children: [
+          TranslationStatusText(text: text, icon: icon, color: widget.profile.primaryColor),
+          const SizedBox(height: 20),
+          _buildMainArea(),
+        ],
+      );
+    }
     return Column(
       children: [
         const Spacer(),
