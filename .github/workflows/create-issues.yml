@@ -1,0 +1,72 @@
+name: Setup Issue Labels
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-labels-and-assign:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - name: Create or update labels
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Create (or update if already existing) the 4 project labels
+          gh label create "must-have"    --color "0052cc" --description "Must-have feature"    --repo $REPO --force
+          gh label create "nice-to-have" --color "5319e7" --description "Nice-to-have feature" --repo $REPO --force
+          gh label create "✅-done"  --color "0e8a16" --description "Feature completed"    --repo $REPO --force
+          gh label create "🔴-todo" --color "d93f0b" --description "Feature not started" --repo $REPO --force
+          echo "Labels created/updated"
+
+      - name: Assign labels to must-have completed issues
+        # Issues #8-16: must-have features that are done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for num in 8 9 10 11 12 13 14 15 16; do
+            gh issue edit $num --repo $REPO --add-label "must-have" --add-label "✅-done"
+          done
+
+      - name: Assign labels to must-have todo issues
+        # Issues #17-20: must-have features not yet started
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for num in 17 18 19 20; do
+            gh issue edit $num --repo $REPO --add-label "must-have" --add-label "🔴-todo"
+          done
+
+      - name: Assign labels to nice-to-have completed issues
+        # Issues #22 and #25: nice-to-have features that are done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for num in 22 25; do
+            gh issue edit $num --repo $REPO --add-label "nice-to-have" --add-label "✅-done"
+          done
+
+      - name: Assign labels to nice-to-have todo issues
+        # Issues #21, #23, #24, #26-29: nice-to-have features not yet started
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          for num in 21 23 24 26 27 28 29; do
+            gh issue edit $num --repo $REPO --add-label "nice-to-have" --add-label "🔴-todo"
+          done
+
+      - name: Close temporary test issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh issue close 6 --repo $REPO --reason "not planned" 2>/dev/null || true
+          gh issue close 7 --repo $REPO --reason "not planned" 2>/dev/null || true
+          echo "Done"
